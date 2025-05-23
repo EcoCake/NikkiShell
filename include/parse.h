@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:18:37 by amezoe            #+#    #+#             */
-/*   Updated: 2025/05/14 22:25:29 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/05/19 19:59:08 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSE_H
 # define PARSE_H
 
-# include "../libft/libft.h"
+# include "../include/libft/libft.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <signal.h>

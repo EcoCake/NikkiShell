@@ -16,12 +16,28 @@ void	fill_token(t_token **tok)
 	node->next = node2;
 }
 
-void amount_pipes(t_token *tok)
+void	create_nodes(t_comms **comms)
+{
+	t_comms *node;
+
+	node = malloc(sizeof(t_comms));
+	if (!node)
+		return ;
+	node->next = NULL;
+	node->index = comms->index;
+	if (!(*comms))
+		*comms = node;
+	else
+	{
+		*comms->next = node;
+		*comms = *comms->next;
+	}
+}
+
+void amount_pipes(t_token *tok, t_comms **comms)
 {
 	int i;
-	t_comms *comms;
 
-	comms->pipen = 0;
 	i = 0;
 	if (!tok->value[i])
 		return ;
@@ -29,16 +45,31 @@ void amount_pipes(t_token *tok)
 	{
 		if (tok->type == PIPE)
 			comms->pipen++;
+		create_nodes(comms);
+		comms->index++;
 		tok = tok->next;
 	}
 
+}
+
+void	init_comms(t_comms **comms)
+{
+	comms->caf = NULL;
+	comms->red_in = NULL;
+	comms->red_out = NULL;
+	comms->hlimiter = NULL;
+	comms->next = NULL;
+	comms->pipen = 0;
+	comms->index = 0;
 }
 
 #include <stdio.h>
 int main(int argc, char **argv)
 {
 	t_token *tok;
+	t_comms *comms;
 
+	init_comms(&comms);
 	fill_token(&tok);
-	amount_pipes(tok);
+	amount_pipes(tok, &comms);
 }
