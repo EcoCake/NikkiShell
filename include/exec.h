@@ -4,7 +4,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/types.h> //both for waitpid
-# include <sys/wait.h> //^
+// # include <sys/wait.h> //^
 # include <fcntl.h> // for O_RDONLY
 # include <errno.h>
 
@@ -17,6 +17,7 @@ typedef struct s_comms
 	struct 	s_comms *next;
 	int		index;
 	int		pipen;
+	int		caf_num;
 }	t_comms;
 
 #endif

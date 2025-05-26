@@ -19,8 +19,9 @@
 # include <signal.h>
 # include <string.h>
 # include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h> // if vs code gives error, install sudo apt-get install libreadline-dev 
+// # include <readline/readline.h>
+// # include <readline/history.h> 
+// if vs code gives error, install sudo apt-get install libreadline-dev 
 //for readline u need all from stdio, readline, and history.
 
 //work in progress struct, as far as ive seen this should be
