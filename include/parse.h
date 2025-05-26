@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:18:37 by amezoe            #+#    #+#             */
-/*   Updated: 2025/05/22 15:44:01 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/05/26 14:16:59 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,21 @@
 
 typedef enum e_token_types
 {
-	D_QUOTE,
-	QUOTE,
-	HERE_DOC,
-	PIPE,
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_APPEND,
-	WORD
+	D_QUOTE,			//0
+	QUOTE,				//1
+	HERE_DOC,			//2
+	PIPE,				//3
+	REDIR_IN,			//4
+	REDIR_OUT,			//5
+	REDIR_APPEND,		//6
+	WORD,				//7
+	DEFAULT_ERROR		//8
 }	t_token_types;
+
+// struct redirection {
+// 	char *filename;			hihi
+// 	t_token_types type;		REDIR_IN
+// }
 
 typedef struct s_token
 {
@@ -49,24 +55,33 @@ typedef struct s_token
 //tokenize_utils.c
 //super self explanatory
 
-//TODO fix smth grisha said was wrong
+//TODO sort funcs according to norm, im sorry im lazy asf
 
-int	is_space(int c);
-int	skip_space(char *line, int i);
-int	is_quote(char c);
+int	is_space(int c); //this ok
+int	is_operator(char c); //this ok
+int	skip_space(const char *line, int i);
+int	is_quote(char c); //is ok
 int	is_word_char(char c);
 int	is_word(const char *s);
+char *extract_word(const char *line, int *position);
+char *extract_quoted_str(const char *line, int *position, char quote);
+char *extract_file_delimiter(const char *line, int *position);
+
 
 //tokenize.c
 
 t_token_types	t_type(const char *str);
 void add_token(t_token **head, t_token **current, char *value, t_token_types type);
-
+t_token *tokenize(char *line);
 
 //signals
 
 extern volatile sig_atomic_t g_last_signal;
-
 void handle_sigint_rl(int signal);
+
+//free.c
+
+void	free_token_list(t_token *head);
+
 
 #endif

@@ -1,27 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   tokenize_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/17 13:13:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/05/26 14:11:26 by amezoe           ###   ########.fr       */
+/*   Created: 2025/05/23 14:30:06 by amezoe            #+#    #+#             */
+/*   Updated: 2025/05/23 14:30:25 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/parse.h"
-
-void	free_token_list(t_token *head)
-{
-	t_token	*tmp;
-
-	while (head)
-	{
-		tmp = head->next;
-		free(head->value);
-		free(head);
-		head = tmp;
-	}
-}
 

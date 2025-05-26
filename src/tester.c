@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/05/22 15:42:15 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/05/26 14:10:11 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 int main()
 {
 	char *line;
+
+	t_token *tokens;
+	t_token *temp;
 
 	signal(SIGINT, handle_sigint_rl); // handler for sigint ctrl c
 	//when received func will be called
@@ -47,6 +50,21 @@ int main()
 			}
 			add_history(line);
 			printf("You entered '%s'\n", line);
+
+			tokens = tokenize(line);
+			if (tokens)
+			{
+				temp = tokens;
+				printf("tokens \n");
+				while (temp)
+				{
+					printf ("type %d, value '%s'\n", temp->type, temp->value);
+					temp = temp->next;
+				}
+				free_token_list(tokens);
+			}
+			else 
+				printf("error with tokenizing\n");
 		}
 		else
 			printf("You entered an empty line\n");
