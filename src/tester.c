@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/03 11:18:42 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/06/03 14:16:57 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int main(int ac, char **av, char **envp)
 			{
 				free(line);
 				printf("Bye bye\n");
+				free_env_list(env_list);
 				rl_clear_history();
 				return 0;
 			}

@@ -1,4 +1,3 @@
-# ULTIMATE CHATGPT MAKE FILE 
 NAME			= nikkishell
 CC				= cc
 
@@ -33,8 +32,7 @@ $(NAME):		$(MINISHELL_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(MINISHELL_OBJS) include/libft/libft.a $(READLINE_FLAGS) -o $(NAME)
 
 #--------UNDER THE MAIN TARGETS IT ONLY COMPILES IF IT IS WITH----------------------------------
-#--------INCLUDE/LIBFT/LIBFT.A I BEG YOU DONT CHANGE IT IT DOESNT FUCKING WORK------------------
-#--------IM 99% SURE ITS RELINKING BUT I CANT BE ARSED------------------------------------------
+#--------INCLUDE/LIBFT/LIBFT.A I BEG YOU DONT CHANGE IT IT DOESNT WORK------------------
 
 $(LIBFT):
 	@echo "Building libft..."
