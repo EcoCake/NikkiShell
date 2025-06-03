@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:18:37 by amezoe            #+#    #+#             */
-/*   Updated: 2025/05/26 14:16:59 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/06/03 11:07:24 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,24 @@ typedef enum e_token_types
 // 	t_token_types type;		REDIR_IN
 // }
 
+
+// struct for the environment variable
+//this was my original idea but due to export ill parse as whole
+//string
+// typedef struct s_env_var
+// {
+// 	char				*key; //example USER or HOME etc
+// 	char				*value; // whatever comes after key
+// 	struct s_env_var	*next; // pointer to next var in the list
+// } t_env_var;
+
+
+typedef struct s_env_var
+{
+	char				*fullstring; // stores key=value as whole
+	struct s_env_var	*next;
+} t_env_var;
+
 typedef struct s_token
 {
 	char			*value;
@@ -67,6 +85,12 @@ char *extract_word(const char *line, int *position);
 char *extract_quoted_str(const char *line, int *position, char quote);
 char *extract_file_delimiter(const char *line, int *position);
 
+// env_utils.c
+
+t_env_var	*create_env_node(char *env_str);
+t_env_var	*init_env_list(char **envp);
+char		*get_env_value(t_env_var *env_list, const char *key);
+char		**env_list_array(t_env_var *env_list);
 
 //tokenize.c
 
@@ -82,6 +106,7 @@ void handle_sigint_rl(int signal);
 //free.c
 
 void	free_token_list(t_token *head);
-
+void	free_env_list(t_env_var *head);
+void	free_env_array(char **env_array);
 
 #endif
