@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:18:37 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/03 11:07:24 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/06/12 09:56:57 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,34 @@ typedef struct s_token
 	struct s_token	*next; //linked list of tokens
 }	t_token;
 
+//struct for a single redir
+typedef struct s_redirection
+{
+	t_token_types			type; //redirIn,redirOut etc
+	char					*file;
+	struct s_redirection	*next;
+}	t_redirection;
+
+
+//struc for command
+
+typedef struct s_cmd
+{
+	char			**args; // array of strings for cmd name and args for execve
+	t_redirection 	*redirerction;
+	struct s_cmd	*next;
+} t_cmd;
+
 //tokenize_utils.c
 //super self explanatory
+
+//parser_utils
+
+t_redirection	*create_redir_node(t_token_types type, char *file);
+int	add_redir_to_cmd(t_cmd *cmd, t_redirection *new_redir);
+int count_word_tokens(t_token *head);
+char	**tokens_to_args_array(t_token **current_token);
+
 
 //TODO sort funcs according to norm, im sorry im lazy asf
 
