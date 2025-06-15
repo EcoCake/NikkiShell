@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:18:37 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/12 09:56:57 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/06/15 13:31:56 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,12 @@ int	add_redir_to_cmd(t_cmd *cmd, t_redirection *new_redir);
 int count_word_tokens(t_token *head);
 char	**tokens_to_args_array(t_token **current_token);
 
+//parser
+
+t_cmd *create_cmd_node();
+t_cmd *parse_tokens(t_token *tokens);
+
+
 
 //TODO sort funcs according to norm, im sorry im lazy asf
 
@@ -134,5 +140,9 @@ void handle_sigint_rl(int signal);
 void	free_token_list(t_token *head);
 void	free_env_list(t_env_var *head);
 void	free_env_array(char **env_array);
+void free_str_array(char **array);
+void free_redir_list(t_redirection *head);
+void free_cmd_list(t_cmd *head);
+
 
 #endif

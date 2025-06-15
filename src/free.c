@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 13:13:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/03 11:01:13 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/06/15 12:38:27 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,47 @@ void	free_env_array(char **env_array)
 			i++;
 		}
 		free(env_array);
+	}
+}
+
+void free_str_array(char **array)
+{
+	int i;
+	i = 0;
+	
+	if (!array)
+		return;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
+void free_redir_list(t_redirection *head)
+{
+	t_redirection *temp;
+	while (head)
+	{
+		temp = head->next;
+		free(head->file);
+		free(head);
+		head = temp;
+	}
+}
+
+void free_cmd_list(t_cmd *head)
+{
+	t_cmd *temp;
+	while (head)
+	{
+		temp = head->next;
+		if (head->args)
+			free_str_array(head->args); //free the char** args array
+		if (head->redirerction)
+			free_redir_list(head->redirerction);
+		free(head);
+		head = temp;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/03 14:16:57 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/06/15 13:31:07 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
+	
 	char		*line;
 	t_token 	*tokens;
-	t_token 	*temp;
+	t_token		*temp_token_print;
 	t_env_var	*env_list;
+	t_cmd		*commands;
 
 	signal(SIGINT, handle_sigint_rl); // handler for sigint ctrl c
 	//when received func will be called
@@ -76,13 +78,65 @@ int main(int ac, char **av, char **envp)
 			tokens = tokenize(line);
 			if (tokens)
 			{
-				temp = tokens;
-				printf("tokens \n");
-				while (temp)
+				temp_token_print = tokens;
+				printf("-------tokens--------\n");
+				while (temp_token_print)
 				{
-					printf ("type %d, value '%s'\n", temp->type, temp->value);
-					temp = temp->next;
+					printf ("type %d, value '%s'\n", temp_token_print->type, temp_token_print->value);
+					temp_token_print = temp_token_print->next;
 				}
+				printf ("----------------\n");
+				
+				commands = parse_tokens(tokens);
+				if (!commands)
+				{
+					printf("cant parse tokens\n");
+					free_token_list(tokens);
+					free(line);
+					continue;
+				}
+
+				printf("-------parsed command-----\n");
+				
+				t_cmd *cmd_temp = commands;
+				while (cmd_temp)
+				{
+					printf("commands block: \n"); //print arg array
+					if (cmd_temp->args)
+					{
+						int i = 0;
+						printf (" ARGS: [");
+						while (cmd_temp->args[i])
+						{
+							printf (" '%s'", cmd_temp->args[i]);
+							i++;
+							if (cmd_temp->args[i])
+								printf(", ");
+						}
+						printf ("]\n");
+					}
+					else
+						printf ("No args found\n");
+					// print redir list
+
+					if (cmd_temp->redirerction)
+					{
+						t_redirection *redir_tmp = cmd_temp->redirerction;
+						printf(" REDIRECTIONS:    \n");
+						while (redir_tmp)
+						{
+							printf ("   Type: %d (FILE: '%s')\n", redir_tmp->type, redir_tmp->file);
+							redir_tmp = redir_tmp->next;
+						}
+					}
+					else
+						printf (" No redirections\n");
+					cmd_temp = cmd_temp->next;
+					if (cmd_temp)
+						printf(" ----- PIPE TO NEXT CMD-----\n");
+				}
+				
+				free_cmd_list(commands);
 				free_token_list(tokens);
 			}
 			else 
@@ -94,6 +148,10 @@ int main(int ac, char **av, char **envp)
 	}
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+
+	free_env_list(env_list);
+	rl_clear_history();
+	
 	return (0);
 }
 
