@@ -20,6 +20,8 @@ SRCS_NAMES      = \
     tokenize_utils1.c \
     tokenize.c \
     env_utils.c \
+	parser_utils.c \
+	parser.c \
 
 MINISHELL_SRCS  = $(addprefix src/, $(SRCS_NAMES))
 

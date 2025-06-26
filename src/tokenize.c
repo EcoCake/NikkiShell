@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:24:00 by amezoe            #+#    #+#             */
-/*   Updated: 2025/05/26 14:11:20 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/06/15 14:01:05 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_token *tokenize(char *line)
 	char quote_char;
 	int i;
 	char *extracted_value;
-	t_token_types token_type;
+	
 	i = 0;
 
 	if (!line)
@@ -76,67 +76,92 @@ t_token *tokenize(char *line)
 		i = skip_space(line, i);
 		if (!line[i])
 			break;
-		token_type = DEFAULT_ERROR;
-		extracted_value = NULL;
-		
+
 		if (line[i] == '<' && line[i+1] == '<')
 		{
-			token_type = HERE_DOC;
+			add_token(&head, &current, ft_strdup("<<"), HERE_DOC);
 			i += 2;
-			extracted_value = extract_file_delimiter(line, &i);
+			i = skip_space(line, i);
+			extracted_value = extract_word(line, &i);
+			if (!extracted_value)
+			{
+				fprintf(stderr, "syntax error near unexpected token 'newline' after '<<'\n");
+				free_token_list(head);
+				return NULL;
+			}
+			add_token(&head, &current, extracted_value, WORD);
 		}
-		
 		else if (line[i] == '>' && line[i+1] == '>')
 		{
-		token_type = REDIR_APPEND;
-		i += 2;
-		extracted_value = extract_file_delimiter(line, &i);	
+			add_token(&head, &current, ft_strdup(">>"), REDIR_APPEND);
+			i += 2;
+			i = skip_space(line, i);
+			extracted_value = extract_word(line, &i);
+			if (!extracted_value)
+			{
+				fprintf(stderr, "syntax error near unexpected token 'newline' after '>>'\n");
+				free_token_list(head);
+				return NULL;
+			}
+			add_token(&head, &current, extracted_value, WORD);
 		}
-		
 		else if (line[i] == '<')
 		{
-		token_type = REDIR_IN;
-		i += 1;
-		extracted_value = extract_file_delimiter(line, &i);	
+			add_token(&head, &current, ft_strdup("<"), REDIR_IN);
+			i += 1;
+			i = skip_space(line, i);
+			extracted_value = extract_word(line, &i);
+			if (!extracted_value)
+			{
+				fprintf(stderr, "syntax error near unexpected token 'newline' after '<'\n");
+				free_token_list(head);
+				return NULL;
+			}
+			add_token(&head, &current, extracted_value, WORD);
 		}
-		
 		else if (line[i] == '>')
 		{
-		token_type = REDIR_OUT;
-		i += 1;
-		extracted_value = extract_file_delimiter(line, &i);	
-		}
-		
+			add_token(&head, &current, ft_strdup(">"), REDIR_OUT);
+			i += 1;
+			i = skip_space(line, i);
+			extracted_value = extract_word(line, &i);
+			if (!extracted_value)
+			{
+				fprintf(stderr, "syntax error near unexpected token 'newline' after '>'\n");
+				free_token_list(head);
+				return NULL;
+			}
+			add_token(&head, &current, extracted_value, WORD);
+        }
 		else if (line[i] == '|')
 		{
-		token_type = PIPE;
-		extracted_value = ft_strdup("|");
-		i += 1;	
+			add_token(&head, &current, ft_strdup("|"), PIPE);
+			i += 1; 
 		}
-
 		else if (is_quote(line[i]))
 		{
 			quote_char = line[i];
 			i++;
-			extracted_value = extract_quoted_str(line, &i, quote_char);
-			if (quote_char == '\'')
-				token_type = QUOTE;
-			else
-				token_type = D_QUOTE;
+			extracted_value = extract_quoted_str(line, &i, quote_char); 
+			if (!extracted_value)
+			{
+				fprintf(stderr, "syntax error: unclosed quote\n");
+				free_token_list(head);
+				return NULL;
+			}
+			add_token(&head, &current, extracted_value, WORD);
 		}
 		else
 		{
-			token_type = WORD;
 			extracted_value = extract_word(line, &i);
+			if (!extracted_value)
+			{
+				fprintf(stderr, "malloc failure for word.\n");
+				free_token_list(head);
+				return NULL;
+			}
+			add_token(&head, &current, extracted_value, WORD);
 		}
-		
-		if (token_type == DEFAULT_ERROR || extracted_value == NULL)
-		{
-			free_token_list(head);
-			return NULL;
-		}
-		add_token(&head, &current, extracted_value, token_type);
 	}
 	return (head);
 }
-
