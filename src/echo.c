@@ -1,14 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/09 18:47:14 by sionow            #+#    #+#             */
-/*   Updated: 2025/06/09 18:47:16 by sionow           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include <unistd.h>
+#include <stdio.h>
+#include <exec.h>
 
 //0 = no flag, 1 = flag found
 int	flag_checker(char *flag)
@@ -66,12 +58,11 @@ int	ft_echo(int argc, char **argv)
 		if (argc > 3)
 			n_skipper(argv, &j);
 		while (argv[j])
-		{
 			ft_write_lines(argv, &i, &j);
-		}
 		if (f == 0)
 			write (1, "\n", 1);
 	}
 	else
 		write (1, "\n", 1);
+	return (0);
 }

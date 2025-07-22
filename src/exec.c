@@ -1,60 +1,273 @@
-#include "../include/exec.h"
-#include "../include/parse.h"
+#include "exec.h"
+#include "parse.h"
 
-void	fill_token(t_token **tok)
+int	ft_strcmp(char *s1, char *s2)
 {
-	t_token	*node;
-	t_token	*node2;
-
-	node = malloc(sizeof(t_token));
-	node2 = malloc(sizeof(t_token));
-	node->value = "ls";
-	node2->value = "-l";
-	node->type = WORD;
-	node2->type = WORD;
-	*tok = node;
-	node->next = node2;
-}
-
-
-void amount_pipes(t_token *tok, t_comms **comms)
-{
-	int i;
+	int	i;
 
 	i = 0;
-	if (!tok->value[i])
-		return ;
-	while (tok)
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
+}
+
+void	free_tab_exec(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
 	{
-		if (tok->type == PIPE)
-			comms->pipen++;
-		create_nodes(comms);
-		comms->index++;
-		tok = tok->next;
+		free(tab[i]);
+		i++;
 	}
-
+	free(tab);
 }
 
-void	init_node(t_comms *node)
+void	exit_free(t_pipeline *pl, t_cmd *cmds)
 {
-	node->caf = NULL;
-	node->red_in = NULL;
-	node->red_out = NULL;
-	node->hlimiter = NULL;
-	node->next = NULL;
-	node->pipen = 0;
-	node->caf_num = 0;
+	close_pipes(pl);
+	free(pl->pids);
+	while (cmds)
+	{
+		while (cmds->redirection)
+		{
+			free(cmds->redirection->file);
+			cmds->redirection = cmds->redirection->next;
+		}
+		free_tab_exec(cmds->args);
+		cmds = cmds->next;
+	}
 }
 
-#include <stdio.h>
-int main(int argc, char **argv)
+char	**create_args(char *args1, char *args2)
 {
-	t_token *tok;
-	t_comms *comms;
+	char	**args;
 
-	comms = NULL;
-	comms->index = 0;
-	comms->pipen = 0;
-	fill_token(&tok);
-	amount_pipes(tok, &comms);
+	args = malloc(sizeof(char *) * 3);
+	if (!args)
+		return (NULL);
+	args[0] = ft_strdup(args1);
+	args[1] = ft_strdup(args2);
+	args[2] = NULL;
+	return (args);
 }
+
+void	fill_cmds(t_cmd **cmds)
+{
+	t_cmd	*first;
+	t_cmd	*second;
+
+	first = malloc(sizeof(t_cmd));
+	first->args = create_args("echo", "hello");
+	first->redirection = NULL;
+	second = malloc(sizeof(t_cmd));
+	second->args = create_args("wc", "-l");
+	second->redirection = NULL;
+	first->next = second;
+	second->next = NULL;
+	*cmds = first;
+}
+
+int	cmds_count(t_cmd *cmds)
+{
+	t_cmd	*cpy;
+	int		i;
+
+	cpy = cmds;
+	i = 0;
+	while (cpy)
+	{
+		i++;
+		cpy = cpy->next;
+	}
+	return (i);
+}
+
+void	close_pipes(t_pipeline *pl)
+{
+	int	i;
+
+	i = 0;
+	while (i < pl->num_cmds - 1)
+	{
+		close(pl->pipes[i][0]);
+		close(pl->pipes[i][1]);
+		free(pl->pipes[i]);
+		i++;
+	}
+	free(pl->pipes);
+}
+
+void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env)
+{
+	int	i;
+
+	i = 0;
+	pl->num_cmds = cmds_count(cmds);
+	pl->pipes = malloc(sizeof(int *) * (pl->num_cmds - 1));
+	if (!pl->pipes)
+		exit (1);
+	while (i < pl->num_cmds - 1)
+	{
+		pl->pipes[i] = malloc(sizeof(int) * 2);
+		if (!pl->pipes[i] || pipe(pl->pipes[i]) == -1)
+		{
+			perror("pipe");
+			exit(1);
+		}
+		i++;
+	}
+	pl->pids = malloc(sizeof(pid_t) * pl->num_cmds);
+	if (!pl->pids)
+	{
+		perror("pids");
+		exit(1);
+	}
+	pl->env = env;
+}
+
+void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds)
+{
+	if (cmds->redirection->type == HERE_DOC)
+		heredoc_check(pl, cmds);
+	else if (cmds->redirection->type == REDIR_IN)
+		redir_in_check(pl, cmds);
+	else if (i > 0)
+		dup2(pl->pipes[i - 1][0], 0);
+	if (cmds->redirection->type == REDIR_OUT)
+		redir_out_check(pl, cmds);
+	else if (cmds->redirection->type == REDIR_APPEND)
+		redir_append_check(pl, cmds);
+	else if (i < pl->num_cmds - 1)
+		dup2(pl->pipes[i][1], 1);
+	close_pipes(pl);
+}
+
+int	absolute_path(char *cmd)
+{
+	if (access(cmd, F_OK | X_OK) == 0)
+		return (0);
+	return (1);
+}
+
+char	*env_path(t_cmd *cmds)
+{
+	char	**split;
+	char	*final_path;
+	int		i;
+
+	split = ft_split(getenv("PATH"), ':');
+	if (!split)
+		return (NULL);
+	i = 0;
+	while (split[i])
+	{
+		final_path = ft_strjoinslash(split[i], cmds->args[0]);
+		if (access(final_path, F_OK | X_OK) == 0)
+		{
+			free_tab_exec(split);
+			return (final_path);
+		}
+		free(final_path);
+		i++;
+	}
+	free_tab_exec(split);
+	return (NULL);
+}
+
+void	not_builtin(t_pipeline *pl, t_cmd *cmds)
+{
+	char	*path;
+
+	if (absolute_path(cmds->args[0]) == 0)
+		execve(cmds->args[0], cmds->args, pl->env);
+	else
+	{
+		path = env_path(cmds);
+		execve(path, cmds->args, pl->env);
+	}
+	perror("execve");
+	exit_free(pl, cmds);
+	exit(127);
+}
+
+int	get_argc(t_cmd *cmds)
+{
+	int	i;
+
+	i = 0;
+	while (cmds->args[i])
+		i++;
+	return (i);
+}
+
+int	builtin_check(t_pipeline *pl, t_cmd *cmds)
+{
+	if (ft_strcmp(cmds->args[0], "cd") == 0)
+		return (ft_cd(get_argc(cmds), cmds->args));
+	if (((ft_strcmp(cmds->args[0], "echo") == 0)))
+		return (ft_echo(get_argc(cmds), cmds->args));
+	not_builtin(pl, cmds);
+	return (127);
+}
+
+void	exec(t_pipeline *pl, t_cmd *cmds, int i)
+{
+	int		error_code;
+
+	command_redirections(i, pl, cmds);
+	error_code = builtin_check(pl, cmds);
+	if (error_code != 0)
+	{
+		perror(cmds->args[0]);
+		exit_free(pl, cmds);
+		exit(error_code);
+	}
+}
+
+void	command_loop(t_pipeline *pl, t_cmd *cmds)
+{
+	int	i;
+
+	i = 0;
+	while (i < pl->num_cmds)
+	{
+		pl->pids[i] = fork();
+		if (pl->pids[i] == -1)
+		{
+			perror("fork");
+			exit (1);
+		}
+		else if (pl->pids[i] == 0)
+		{
+			free(pl->pids);
+			pl->pids = NULL;
+			exec(pl, cmds, i);
+		}
+		if (i > 0)
+			close(pl->pipes[i - 1][0]);
+		if (i < pl->num_cmds - 1)
+			close(pl->pipes[i][1]);
+		i++;
+	}
+}
+
+void	exec_main(t_cmd *cmds, char **env)
+{
+	t_pipeline	pl;
+
+	init_pl(&pl, cmds, env);
+	command_loop(&pl, cmds);
+}
+
+// int	main(int argc, char **argv, char **env)
+// {
+// 	t_cmd	*cmds;
+
+// 	(void)argc;
+// 	(void)argv;
+// 	cmds = NULL;
+// 	fill_cmds(&cmds);
+// 	exec_main(cmds, env);
+// }

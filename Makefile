@@ -1,49 +1,70 @@
 NAME			= nikkishell
 CC				= cc
-CFLAGS			= -Wall -Wextra -Werror -I$(LIBFT_DIR)
+
+CFLAGS			= -Wall -Wextra -Werror -g -I$(INC_DIR) -I$(LIBFT_DIR)
 
 INC_DIR			= include/
 LIBFT_DIR		= include/libft/
 
+
 LIBFT			= $(LIBFT_DIR)libft.a
 
+READLINE_FLAGS  = -lreadline
 
-# Source files for minishell
+# --- Source Files ---
+SRCS_NAMES      = \
+    tester.c \
+    free.c \
+    signals.c \
+    tokenize_utils.c \
+    tokenize_utils1.c \
+    tokenize.c \
+    env_utils.c \
+	parser_utils.c \
+	parser.c \
+	exec.c	\
+	redirs.c	\
+	cd.c		\
+	echo.c		\
+	get_next_line.c	\
+	get_next_line_utils.c	\
 
-#MINISHELL_SRCS_ALICIA = 
+MINISHELL_SRCS  = $(addprefix src/, $(SRCS_NAMES))
 
+MINISHELL_OBJS  = $(MINISHELL_SRCS:.c=.o)
 
-#MINISHELL_SRCS_SOPHIA = 
+# --- Main Targets ---
+all:            $(NAME)
 
+$(NAME):		$(MINISHELL_OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(MINISHELL_OBJS) include/libft/libft.a $(READLINE_FLAGS) -o $(NAME)
 
+#--------UNDER THE MAIN TARGETS IT ONLY COMPILES IF IT IS WITH----------------------------------
+#--------INCLUDE/LIBFT/LIBFT.A I BEG YOU DONT CHANGE IT IT DOESNT WORK------------------
 
-#---------------WILL HAVE TO ADD ASCII ART FOR NIKKISHELL---------------
-
-
-MINISHELL_OBJS	= $(MINISHELL_SRCS_ALICIA:.c=.o) $(MINISHELL_SRCS_SOPHIA:.c=.o)
-
-all:			$(NAME)
-
-$(NAME):		$(MINISHELL_OBJS) $(LIBFT_DIR)/libft.a
-				$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBS) -o $(NAME)
-	
-libft/libft.a:	$(MAKE) -C $(LIBFT_DIR)
+$(LIBFT):
+	@echo "Building libft..."
+	$(MAKE) -C $(LIBFT_DIR)
 
 %.o: %.c
-				$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-				$(MAKE) -C $(LIBFT_DIR) clean
-				rm -f $(MINISHELL_OBJS)
+	@echo "Cleaning project object files..."
+	rm -f $(MINISHELL_OBJS)
+	@echo "Cleaning libft object files..."
+	$(MAKE) -C $(LIBFT_DIR) clean
 
-fclean:			clean
-				$(MAKE) -C $(LIBFT_DIR) fclean
-				rm -f $(NAME)
+fclean:         clean
+	@echo "Cleaning executable..."
+	rm -f $(NAME)
+	@echo "Cleaning libft executable/archive..."
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
-re:				fclean all
+re:             fclean all
 
-# valgrind rule
-valgrind:		$(NAME)
-				valgrind --leak-check=full --track-origins=yes ./$(NAME) $(ARGS)
+valgrind:       $(NAME)
+	@echo "Running Valgrind..."
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) $(ARGS)
 
-.PHONY:			all libft clean fclean re
+.PHONY:         all clean fclean re valgrind
