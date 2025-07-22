@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:38:23 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/12 09:57:44 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/22 21:07:02 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ int	add_redir_to_cmd(t_cmd *cmd, t_redirection *new_redir)
 
 	if (!cmd || !new_redir)
 		return (-1);
-	if (!cmd->redirerction)
-		cmd->redirerction = new_redir;
+	if (!cmd->redirection)
+		cmd->redirection = new_redir;
 	else
 		{
-			current = cmd->redirerction;
+			current = cmd->redirection;
 			while (current->next)
 				current = current->next;
 			current->next = new_redir;

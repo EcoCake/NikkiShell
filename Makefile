@@ -22,6 +22,12 @@ SRCS_NAMES      = \
     env_utils.c \
 	parser_utils.c \
 	parser.c \
+	exec.c	\
+	redirs.c	\
+	cd.c		\
+	echo.c		\
+	get_next_line.c	\
+	get_next_line_utils.c	\
 
 MINISHELL_SRCS  = $(addprefix src/, $(SRCS_NAMES))
 

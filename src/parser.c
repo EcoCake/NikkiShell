@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:04:18 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/15 13:49:56 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/22 21:06:52 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_cmd *create_cmd_node()
 	if (!new)
 		return NULL;
 	new->args = NULL;
-	new->redirerction = NULL;
+	new->redirection = NULL;
 	new->next = NULL;
 	return (new);
 }

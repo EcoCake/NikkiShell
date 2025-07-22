@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 13:13:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/15 12:38:27 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/22 21:05:07 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ void free_cmd_list(t_cmd *head)
 		temp = head->next;
 		if (head->args)
 			free_str_array(head->args); //free the char** args array
-		if (head->redirerction)
-			free_redir_list(head->redirerction);
+		if (head->redirection)
+			free_redir_list(head->redirection);
 		free(head);
 		head = temp;
 	}

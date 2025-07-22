@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tester.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/15 13:31:07 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/22 21:03:59 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,9 @@ int main(int ac, char **av, char **envp)
 						printf ("No args found\n");
 					// print redir list
 
-					if (cmd_temp->redirerction)
+					if (cmd_temp->redirection)
 					{
-						t_redirection *redir_tmp = cmd_temp->redirerction;
+						t_redirection *redir_tmp = cmd_temp->redirection;
 						printf(" REDIRECTIONS:    \n");
 						while (redir_tmp)
 						{

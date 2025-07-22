@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:18:37 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/15 13:31:56 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/22 21:00:48 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct s_redirection
 typedef struct s_cmd
 {
 	char			**args; // array of strings for cmd name and args for execve
-	t_redirection 	*redirerction;
+	t_redirection 	*redirection;
 	struct s_cmd	*next;
 } t_cmd;
 
