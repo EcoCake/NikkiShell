@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moo <moo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 17:50:09 by moo               #+#    #+#             */
-/*   Updated: 2024/12/06 16:14:56 by moo              ###   ########.fr       */
+/*   Created: 2024/12/04 17:50:09 by sionow            #+#    #+#             */
+/*   Updated: 2025/07/25 00:23:33 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+#include "parse.h"
 
 int	ft_strchrnum(char *s, char c)
 {
@@ -35,10 +35,10 @@ char	*ft_cpystr(char *s1)
 	if (!s1[i])
 		return (NULL);
 	while (s1[i] && s1[i] != '\n')
-	{
 		i++;
-	}
 	s2 = malloc(i + 2);
+	if (!s2)
+		return (NULL);
 	i = 0;
 	while (s1[i] && s1[i] != '\n')
 	{
