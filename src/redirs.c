@@ -1,5 +1,4 @@
-#include "parse.h"
-#include "exec.h"
+#include "../include/minishell.h"
 
 void	read_until_limiter(int fd, char *limiter)
 {

@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 17:50:09 by sionow            #+#    #+#             */
-/*   Updated: 2025/07/25 00:23:33 by sionow           ###   ########.fr       */
+/*   Created: 2024/12/04 17:50:09 by moo               #+#    #+#             */
+/*   Updated: 2025/07/25 00:49:30 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parse.h"
+#include "../include/minishell.h"
 
 int	ft_strchrnum(char *s, char c)
 {
