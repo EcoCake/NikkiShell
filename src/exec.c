@@ -1,4 +1,5 @@
-#include "../include/minishell.h"
+#include "exec.h"
+#include "parse.h"
 
 int	ft_strcmp(char *s1, char *s2)
 {
