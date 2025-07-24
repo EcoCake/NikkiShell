@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:45:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/05/26 14:12:43 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/25 01:50:50 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parse.h"
+#include "minishell.h"
 
 int	is_space(int c)
 {

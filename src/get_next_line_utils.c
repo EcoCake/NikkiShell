@@ -6,11 +6,11 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:50:09 by sionow            #+#    #+#             */
-/*   Updated: 2025/07/23 13:57:27 by sionow           ###   ########.fr       */
+/*   Updated: 2025/07/25 01:50:24 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parse.h"
+#include "minishell.h"
 
 int	ft_strchrnum(char *s, char c)
 {

@@ -6,11 +6,11 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/23 12:49:37 by sionow           ###   ########.fr       */
+/*   Updated: 2025/07/25 01:50:47 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parse.h"
+#include "minishell.h"
 
 
 int main(int ac, char **av, char **envp)

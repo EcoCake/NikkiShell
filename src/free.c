@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 13:13:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/15 12:38:27 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/25 01:50:20 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parse.h"
+#include "minishell.h"
 
 void	free_token_list(t_token *head)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:38:23 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/12 09:57:44 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/25 01:50:32 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parse.h"
+#include "minishell.h"
 
 t_redirection	*create_redir_node(t_token_types type, char *file)
 {

@@ -1,6 +1,4 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <exec.h>
+#include "minishell.h"
 
 //0 = no flag, 1 = flag found
 int	flag_checker(char *flag)

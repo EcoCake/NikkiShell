@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:24:00 by amezoe            #+#    #+#             */
-/*   Updated: 2025/06/15 14:01:05 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/25 01:51:53 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parse.h"
+#include "minishell.h"
 
 t_token_types   t_type(const char *str)
 {
