@@ -255,9 +255,22 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 void	exec_main(t_cmd *cmds, char **env)
 {
 	t_pipeline	pl;
+	int			i;
+	int			status;
 
 	init_pl(&pl, cmds, env);
 	command_loop(&pl, cmds);
+	
+	// Wait for all child processes to complete
+	i = 0;
+	while (i < pl.num_cmds)
+	{
+		waitpid(pl.pids[i], &status, 0);
+		i++;
+	}
+	
+	close_pipes(&pl);
+	free(pl.pids);
 }
 
 // int	main(int argc, char **argv, char **env)
