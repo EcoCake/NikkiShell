@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:48 by sionow            #+#    #+#             */
-/*   Updated: 2025/07/24 13:43:57 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/23 12:57:44 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include <unistd.h>
+#include <limits.h> //for Pathmax
+#include <stdlib.h>
+#include <stdio.h>
+#include "parse.h"
 
 int	ft_cd_error(char *path, char *to_free)
 {

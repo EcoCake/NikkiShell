@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 17:50:12 by moo               #+#    #+#             */
-/*   Updated: 2025/07/24 13:49:08 by amezoe           ###   ########.fr       */
+/*   Created: 2024/12/04 17:50:12 by sionow            #+#    #+#             */
+/*   Updated: 2025/07/23 13:08:20 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "parse.h"
 
 char	*ft_fill_ex(char *excess)
 {

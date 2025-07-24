@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tester.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/24 13:49:08 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/23 12:49:37 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/parse.h"
 
 
 int main(int ac, char **av, char **envp)
@@ -135,7 +135,7 @@ int main(int ac, char **av, char **envp)
 					if (cmd_temp)
 						printf(" ----- PIPE TO NEXT CMD-----\n");
 				}
-				
+				exec_main(commands, envp);
 				free_cmd_list(commands);
 				free_token_list(tokens);
 			}

@@ -1,4 +1,5 @@
-#include "../include/minishell.h"
+#include "exec.h"
+#include "parse.h"
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -25,8 +26,7 @@ void	free_tab_exec(char **tab)
 
 void	exit_free(t_pipeline *pl, t_cmd *cmds)
 {
-	close_pipes(pl);
-	free(pl->pids);
+	(void) close_pipes(pl);
 	while (cmds)
 	{
 		while (cmds->redirection)
@@ -88,6 +88,8 @@ void	close_pipes(t_pipeline *pl)
 	int	i;
 
 	i = 0;
+	if (pl->num_cmds <= 1)
+		return ;
 	while (i < pl->num_cmds - 1)
 	{
 		close(pl->pipes[i][0]);
@@ -128,18 +130,28 @@ void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env)
 
 void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds)
 {
-	if (cmds->redirection->type == HERE_DOC)
-		heredoc_check(pl, cmds);
-	else if (cmds->redirection->type == REDIR_IN)
-		redir_in_check(pl, cmds);
-	else if (i > 0)
-		dup2(pl->pipes[i - 1][0], 0);
-	if (cmds->redirection->type == REDIR_OUT)
-		redir_out_check(pl, cmds);
-	else if (cmds->redirection->type == REDIR_APPEND)
-		redir_append_check(pl, cmds);
-	else if (i < pl->num_cmds - 1)
-		dup2(pl->pipes[i][1], 1);
+	if (cmds->redirection)
+	{
+		if (cmds->redirection->type == HERE_DOC)
+			heredoc_check(pl, cmds);
+		else if (cmds->redirection->type == REDIR_IN)
+			redir_in_check(pl, cmds);
+		else if (i > 0)
+			dup2(pl->pipes[i - 1][0], 0);
+		if (cmds->redirection->type == REDIR_OUT)
+			redir_out_check(pl, cmds);
+		else if (cmds->redirection->type == REDIR_APPEND)
+			redir_append_check(pl, cmds);
+		else if (i < pl->num_cmds - 1)
+			dup2(pl->pipes[i][1], 1);
+	}
+	else
+	{
+		if (i > 0)
+			dup2(pl->pipes[i - 1][0], 0);
+		if (i < pl->num_cmds - 1)
+			dup2(pl->pipes[i][1], 1);
+	}
 	close_pipes(pl);
 }
 
@@ -228,8 +240,10 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 void	command_loop(t_pipeline *pl, t_cmd *cmds)
 {
 	int	i;
+	t_cmd *current_cmd;
 
 	i = 0;
+	current_cmd = cmds;
 	while (i < pl->num_cmds)
 	{
 		pl->pids[i] = fork();
@@ -241,13 +255,13 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 		else if (pl->pids[i] == 0)
 		{
 			free(pl->pids);
-			pl->pids = NULL;
-			exec(pl, cmds, i);
+			exec(pl, current_cmd, i);
 		}
 		if (i > 0)
 			close(pl->pipes[i - 1][0]);
 		if (i < pl->num_cmds - 1)
 			close(pl->pipes[i][1]);
+		current_cmd = current_cmd->next;
 		i++;
 	}
 }

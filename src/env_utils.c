@@ -6,11 +6,11 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:48:44 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/24 13:49:08 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/06/03 11:26:31 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/parse.h"
 
 //create an env_var node from key=value string
 t_env_var	*create_env_node(char *env_str)

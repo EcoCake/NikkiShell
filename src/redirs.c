@@ -1,4 +1,5 @@
-#include "../include/minishell.h"
+#include "parse.h"
+#include "exec.h"
 
 void	read_until_limiter(int fd, char *limiter)
 {
@@ -9,7 +10,10 @@ void	read_until_limiter(int fd, char *limiter)
 		write(1, "> ", 2);
 		buf = get_next_line(0);
 		if (ft_strcmp(buf, limiter) == 0)
+		{
+			free(buf);
 			break ;
+		}
 		write(fd, buf, ft_strlen(buf));
 		write(fd, "\n", 1);
 		free(buf);

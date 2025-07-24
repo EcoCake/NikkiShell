@@ -6,11 +6,11 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:24:00 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/24 13:49:08 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/06/15 14:01:05 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/parse.h"
 
 t_token_types   t_type(const char *str)
 {
