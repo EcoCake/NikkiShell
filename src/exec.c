@@ -253,7 +253,7 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 		}
 		else if (pl->pids[i] == 0)
 		{
-			free(pl->pids);
+			//free(pl->pids);
 			exec(pl, current_cmd, i);
 		}
 		if (i > 0)
