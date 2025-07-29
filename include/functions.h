@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/29 22:11:17 by sionow           ###   ########.fr       */
+/*   Updated: 2025/07/29 22:16:42 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	fill_cmds(t_cmd **cmds);
 int		cmds_count(t_cmd *cmds);
 void	close_pipes(t_pipeline *pl);
 void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env);
+void	init_pipes(t_pipeline *pl, int num_cmds);
 void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds);
 int		absolute_path(char *cmd);
 char	*env_path(t_cmd *cmds);

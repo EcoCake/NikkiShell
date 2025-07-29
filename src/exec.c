@@ -139,15 +139,15 @@ void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds)
 	if (cmds->redirection)
 	{
 		if (cmds->redirection->type == HERE_DOC)
-			heredoc_check(pl, cmds);
+			heredoc_check(cmds);
 		else if (cmds->redirection->type == REDIR_IN)
-			redir_in_check(pl, cmds);
+			redir_in_check(cmds);
 		else if (i > 0 && pl->num_cmds > 1)
 			dup2(pl->pipes[i - 1][0], 0);
 		if (cmds->redirection->type == REDIR_OUT)
-			redir_out_check(pl, cmds);
+			redir_out_check(cmds);
 		else if (cmds->redirection->type == REDIR_APPEND)
-			redir_append_check(pl, cmds);
+			redir_append_check(cmds);
 		else if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			dup2(pl->pipes[i][1], 1);
 	}
