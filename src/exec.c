@@ -99,16 +99,15 @@ void	close_pipes(t_pipeline *pl)
 	free(pl->pipes);
 }
 
-void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env)
+void	init_pipes(t_pipeline *pl, int num_cmds)
 {
 	int	i;
 
 	i = 0;
-	pl->num_cmds = cmds_count(cmds);
-	pl->pipes = malloc(sizeof(int *) * (pl->num_cmds - 1));
+	pl->pipes = malloc(sizeof(int *) * (num_cmds - 1));
 	if (!pl->pipes)
 		exit (1);
-	while (i < pl->num_cmds - 1)
+	while (i < num_cmds - 1)
 	{
 		pl->pipes[i] = malloc(sizeof(int) * 2);
 		if (!pl->pipes[i] || pipe(pl->pipes[i]) == -1)
@@ -118,6 +117,15 @@ void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env)
 		}
 		i++;
 	}
+}
+
+void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env)
+{
+	pl->num_cmds = cmds_count(cmds);
+	if (pl->num_cmds > 1)
+		init_pipes(pl, pl->num_cmds);
+	else
+		pl->pipes = NULL;
 	pl->pids = malloc(sizeof(pid_t) * pl->num_cmds);
 	if (!pl->pids)
 	{
@@ -135,20 +143,20 @@ void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds)
 			heredoc_check(pl, cmds);
 		else if (cmds->redirection->type == REDIR_IN)
 			redir_in_check(pl, cmds);
-		else if (i > 0)
+		else if (i > 0 && pl->num_cmds > 1)
 			dup2(pl->pipes[i - 1][0], 0);
 		if (cmds->redirection->type == REDIR_OUT)
 			redir_out_check(pl, cmds);
 		else if (cmds->redirection->type == REDIR_APPEND)
 			redir_append_check(pl, cmds);
-		else if (i < pl->num_cmds - 1)
+		else if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			dup2(pl->pipes[i][1], 1);
 	}
 	else
 	{
-		if (i > 0)
+		if (i > 0 && pl->num_cmds > 1)
 			dup2(pl->pipes[i - 1][0], 0);
-		if (i < pl->num_cmds - 1)
+		if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			dup2(pl->pipes[i][1], 1);
 	}
 	close_pipes(pl);
@@ -256,9 +264,9 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 			//free(pl->pids);
 			exec(pl, current_cmd, i);
 		}
-		if (i > 0)
+		if (i > 0 && pl->num_cmds > 1)
 			close(pl->pipes[i - 1][0]);
-		if (i < pl->num_cmds - 1)
+		if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			close(pl->pipes[i][1]);
 		current_cmd = current_cmd->next;
 		i++;
