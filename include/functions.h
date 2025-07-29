@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/24 13:59:21 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/29 22:11:17 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char		**env_list_array(t_env_var *env_list);
 
 int		ft_strcmp(char *s1, char *s2);
 void	free_tab_exec(char **tab);
-void	exit_free(t_pipeline *pl, t_cmd *cmds);
+void	exit_free(t_cmd *cmds);
 char	**create_args(char *args1, char *args2);
 void	fill_cmds(t_cmd **cmds);
 int		cmds_count(t_cmd *cmds);
@@ -93,10 +93,10 @@ t_cmd	*parse_tokens(t_token *tokens);
 //redirs.c
 
 void	read_until_limiter(int fd, char *limiter);
-void	heredoc_check(t_pipeline *pl, t_cmd *cmds);
-void	redir_in_check(t_pipeline *pl, t_cmd *cmds);
-void	redir_out_check(t_pipeline *pl, t_cmd *cmds);
-void	redir_append_check(t_pipeline *pl, t_cmd *cmds);
+void	heredoc_check(t_cmd *cmds);
+void	redir_in_check(t_cmd *cmds);
+void	redir_out_check(t_cmd *cmds);
+void	redir_append_check(t_cmd *cmds);
 
 //signals.c
 

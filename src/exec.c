@@ -23,9 +23,8 @@ void	free_tab_exec(char **tab)
 	free(tab);
 }
 
-void	exit_free(t_pipeline *pl, t_cmd *cmds)
+void	exit_free(t_cmd *cmds)
 {
-	(void) close_pipes(pl);
 	while (cmds)
 	{
 		while (cmds->redirection)
@@ -206,7 +205,7 @@ void	not_builtin(t_pipeline *pl, t_cmd *cmds)
 		execve(path, cmds->args, pl->env);
 	}
 	perror("execve");
-	exit_free(pl, cmds);
+	exit_free(cmds);
 	exit(127);
 }
 
@@ -239,7 +238,7 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 	if (error_code != 0)
 	{
 		perror(cmds->args[0]);
-		exit_free(pl, cmds);
+		exit_free(cmds);
 		exit(error_code);
 	}
 }

@@ -19,13 +19,13 @@ void	read_until_limiter(int fd, char *limiter)
 	}
 }
 
-void	heredoc_check(t_pipeline *pl, t_cmd *cmds)
+void	heredoc_check(t_cmd *cmds)
 {
 	int	fd[2];
 
 	if (pipe(fd) == -1)
 	{
-		exit_free(pl, cmds);
+		exit_free(cmds);
 		exit(1);
 	}
 	read_until_limiter(fd[1], cmds->redirection->file);
@@ -34,7 +34,7 @@ void	heredoc_check(t_pipeline *pl, t_cmd *cmds)
 	close(fd[0]);
 }
 
-void	redir_in_check(t_pipeline *pl, t_cmd *cmds)
+void	redir_in_check(t_cmd *cmds)
 {
 	int	fd;
 
@@ -42,14 +42,14 @@ void	redir_in_check(t_pipeline *pl, t_cmd *cmds)
 	if (fd == -1)
 	{
 		perror(cmds->redirection->file);
-		exit_free(pl, cmds);
+		exit_free(cmds);
 		exit(1);
 	}
 	dup2(fd, 0);
 	close(fd);
 }
 
-void	redir_out_check(t_pipeline *pl, t_cmd *cmds)
+void	redir_out_check(t_cmd *cmds)
 {
 	int	fd;
 
@@ -57,14 +57,14 @@ void	redir_out_check(t_pipeline *pl, t_cmd *cmds)
 	if (fd == -1)
 	{
 		perror(cmds->redirection->file);
-		exit_free(pl, cmds);
+		exit_free(cmds);
 		exit(1);
 	}
 	dup2(fd, 1);
 	close(fd);
 }
 
-void	redir_append_check(t_pipeline *pl, t_cmd *cmds)
+void	redir_append_check(t_cmd *cmds)
 {
 	int	fd;
 
@@ -72,7 +72,7 @@ void	redir_append_check(t_pipeline *pl, t_cmd *cmds)
 	if (fd == -1)
 	{
 		perror(cmds->redirection->file);
-		exit_free(pl, cmds);
+		exit_free(cmds);
 		exit(1);
 	}
 	dup2(fd, 1);
