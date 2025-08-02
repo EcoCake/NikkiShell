@@ -272,26 +272,112 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 	}
 }
 
-void	exec_main(t_cmd *cmds, char **env)
-{
-	t_pipeline	pl;
-	int			i;
-	int			status;
+// THIS IF FOR MY TEST U CAN COMMENT IT OUT 
 
-	init_pl(&pl, cmds, env);
-	command_loop(&pl, cmds);
-	
-	// Wait for all child processes to complete
-	i = 0;
-	while (i < pl.num_cmds)
-	{
-		waitpid(pl.pids[i], &status, 0);
-		i++;
-	}
-	
-	close_pipes(&pl);
-	free(pl.pids);
+int get_arg_count(char **args) {
+    int count = 0;
+    while (args && args[count])
+        count++;
+    return count;
 }
+
+
+void exec_main(t_cmd *cmds, t_env_var *env_list, int *last_exit_status_ptr)
+{
+    t_pipeline  pl;
+    int         i;
+    int         status;
+    char        **exec_envp;
+
+    // Phase 1: Expansion of all arguments and redirections for all commands
+    t_cmd *current_cmd_for_expansion = cmds;
+    while (current_cmd_for_expansion)
+    {
+        expand_cmd_args(current_cmd_for_expansion, env_list, *last_exit_status_ptr);
+        expand_redirs(current_cmd_for_expansion, env_list, *last_exit_status_ptr);
+        current_cmd_for_expansion = current_cmd_for_expansion->next;
+    }
+
+    // Phase 2: Handle single built-in commands directly in the parent process
+    // This must happen BEFORE pipe setup and forking.
+    // We check if it's a single command (no pipes) AND it's a known built-in.
+    if (cmds && cmds->args && cmds->args[0] && cmds->next == NULL) // Single command
+    {
+        // Check for specific built-ins using ft_strncmp
+        if (ft_strncmp(cmds->args[0], "echo", 5) == 0)
+        {
+            *last_exit_status_ptr = ft_echo(get_arg_count(cmds->args), cmds->args);
+            // After executing a built-in, no need to proceed with fork/exec/wait.
+            return; // Exit exec_main.
+        }
+        // Add checks for other built-ins here in the same manner:
+        // else if (ft_strncmp(cmds->args[0], "cd", 3) == 0) {
+        //     *last_exit_status_ptr = builtin_cd(cmds->args, env_list);
+        //     return;
+        // }
+        // else if (ft_strncmp(cmds->args[0], "pwd", 4) == 0) {
+        //     *last_exit_status_ptr = builtin_pwd(cmds->args);
+        //     return;
+        // }
+        // ... and so on for export, unset, env, exit.
+        // NOTE: 'exit' built-in has special behavior (exiting the shell),
+        // so its handling might be slightly different.
+    }
+
+    // Phase 3: If not a single built-in, proceed with external command execution or pipelines
+    exec_envp = env_list_array(env_list);
+    if (!exec_envp) {
+        perror("minishell: malloc failed for execve environment array");
+        *last_exit_status_ptr = 1; // Set error status for malloc failure
+        return; 
+    }
+
+    init_pl(&pl, cmds, exec_envp);
+    command_loop(&pl, cmds); // This will now primarily handle external commands or piped built-ins
+
+    // Phase 4: Wait for child processes (only for commands that were forked)
+    i = 0;
+    while (i < pl.num_cmds)
+    {
+        waitpid(pl.pids[i], &status, 0);
+        if (WIFEXITED(status))
+            *last_exit_status_ptr = WEXITSTATUS(status);
+        else if (WIFSIGNALED(status))
+            *last_exit_status_ptr = 128 + WTERMSIG(status); // For signals like Ctrl+C
+        i++;
+    }  
+
+    // Phase 5: Cleanup
+    close_pipes(&pl);
+    free(pl.pids);
+    free_env_array(exec_envp);
+}
+
+
+
+
+//I COMMENTED FOR TESTING 
+
+// void	exec_main(t_cmd *cmds, char **env)
+// {
+// 	t_pipeline	pl;
+// 	int			i;
+// 	int			status;
+
+// 	init_pl(&pl, cmds, env);
+// 	command_loop(&pl, cmds);
+	
+// 	// Wait for all child processes to complete
+// 	i = 0;
+// 	while (i < pl.num_cmds)
+// 	{
+// 		waitpid(pl.pids[i], &status, 0);
+// 		i++;
+// 	}
+	
+// 	close_pipes(&pl);
+// 	free(pl.pids);
+// }
 
 // int	main(int argc, char **argv, char **env)
 // {
