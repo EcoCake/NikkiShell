@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/29 22:16:42 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/03 18:07:00 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ int		flag_checker(char *flag);
 void	n_skipper(char **argv, int *j);
 void	ft_write_lines(char **argv, int *i, int *j);
 int		ft_echo(int argc, char **argv);
+
+// pwd.c
+int ft_pwd(int argc);
 
 // env_utils.c
 

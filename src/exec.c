@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
+/*   Updated: 2025/08/03 18:07:18 by sionow           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_strcmp(char *s1, char *s2)
@@ -225,6 +237,8 @@ int	builtin_check(t_pipeline *pl, t_cmd *cmds)
 		return (ft_cd(get_argc(cmds), cmds->args));
 	if (((ft_strcmp(cmds->args[0], "echo") == 0)))
 		return (ft_echo(get_argc(cmds), cmds->args));
+	if (((ft_strcmp(cmds->args[0], "pwd") == 0)))
+		return (ft_pwd(get_argc(cmds)));
 	not_builtin(pl, cmds);
 	return (127);
 }
@@ -245,8 +259,8 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 
 void	command_loop(t_pipeline *pl, t_cmd *cmds)
 {
-	int	i;
-	t_cmd *current_cmd;
+	int		i;
+	t_cmd	*current_cmd;
 
 	i = 0;
 	current_cmd = cmds;
@@ -259,10 +273,7 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 			exit (1);
 		}
 		else if (pl->pids[i] == 0)
-		{
-			//free(pl->pids);
 			exec(pl, current_cmd, i);
-		}
 		if (i > 0 && pl->num_cmds > 1)
 			close(pl->pipes[i - 1][0]);
 		if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
@@ -278,17 +289,14 @@ void	exec_main(t_cmd *cmds, char **env)
 	int			i;
 	int			status;
 
+	i = 0;
 	init_pl(&pl, cmds, env);
 	command_loop(&pl, cmds);
-	
-	// Wait for all child processes to complete
-	i = 0;
 	while (i < pl.num_cmds)
 	{
 		waitpid(pl.pids[i], &status, 0);
 		i++;
 	}
-	
 	close_pipes(&pl);
 	free(pl.pids);
 }
