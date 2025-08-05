@@ -25,6 +25,7 @@ SRCS_NAMES      = \
 	redirs.c	\
 	cd.c		\
 	echo.c		\
+	pwd.c		\
 	get_line.c	\
 	gl_utils.c	\
 	expansion.c	\
