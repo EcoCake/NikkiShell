@@ -28,6 +28,7 @@ SRCS_NAMES      = \
 	pwd.c		\
 	get_line.c	\
 	gl_utils.c	\
+	expansion.c	\
 
 MINISHELL_SRCS  = $(addprefix src/, $(SRCS_NAMES))
 

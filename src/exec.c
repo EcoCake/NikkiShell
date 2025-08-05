@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/03 18:07:18 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/06 01:40:50 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,17 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 	}
 }
 
-void	exec_main(t_cmd *cmds, char **env)
+// THIS IF FOR MY TEST U CAN COMMENT IT OUT 
+
+int get_arg_count(char **args) {
+    int count = 0;
+    while (args && args[count])
+        count++;
+    return count;
+}
+
+
+void exec_main(t_cmd *cmds, t_env_var *env_list, int *last_exit_status_ptr)
 {
 	t_pipeline	pl;
 	int			i;
