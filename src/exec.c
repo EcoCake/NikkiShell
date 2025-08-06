@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/06 01:40:50 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/06 22:55:30 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	init_pipes(t_pipeline *pl, int num_cmds)
 	}
 }
 
-void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env)
+void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list)
 {
 	pl->num_cmds = cmds_count(cmds);
 	if (pl->num_cmds > 1)
@@ -143,7 +143,7 @@ void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env)
 		perror("pids");
 		exit(1);
 	}
-	pl->env = env;
+	pl->env = env_list;
 }
 
 void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds)
@@ -208,13 +208,15 @@ char	*env_path(t_cmd *cmds)
 void	not_builtin(t_pipeline *pl, t_cmd *cmds)
 {
 	char	*path;
+	char	**env_array;
 
+	env_array = env_list_array(pl->env);
 	if (absolute_path(cmds->args[0]) == 0)
-		execve(cmds->args[0], cmds->args, pl->env);
+		execve(cmds->args[0], cmds->args, env_array);
 	else
 	{
 		path = env_path(cmds);
-		execve(path, cmds->args, pl->env);
+		execve(path, cmds->args, env_array);
 	}
 	perror("execve");
 	exit_free(cmds);
@@ -255,6 +257,8 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 		exit_free(cmds);
 		exit(error_code);
 	}
+	else
+		exit(error_code);
 }
 
 void	command_loop(t_pipeline *pl, t_cmd *cmds)
@@ -293,14 +297,14 @@ int get_arg_count(char **args) {
 }
 
 
-void exec_main(t_cmd *cmds, t_env_var *env_list, int *last_exit_status_ptr)
+void exec_main(t_cmd *cmds, t_env_var *env_list)
 {
 	t_pipeline	pl;
 	int			i;
 	int			status;
 
 	i = 0;
-	init_pl(&pl, cmds, env);
+	init_pl(&pl, cmds, env_list);
 	command_loop(&pl, cmds);
 	while (i < pl.num_cmds)
 	{

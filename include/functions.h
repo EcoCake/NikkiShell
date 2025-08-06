@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/06 01:25:12 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/06 22:48:58 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	**create_args(char *args1, char *args2);
 void	fill_cmds(t_cmd **cmds);
 int		cmds_count(t_cmd *cmds);
 void	close_pipes(t_pipeline *pl);
-void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env);
+void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list);
 void	init_pipes(t_pipeline *pl, int num_cmds);
 void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds);
 int		absolute_path(char *cmd);
@@ -60,7 +60,7 @@ int		builtin_check(t_pipeline *pl, t_cmd *cmds);
 void	exec(t_pipeline *pl, t_cmd *cmds, int i);
 void	command_loop(t_pipeline *pl, t_cmd *cmds);
 //void	exec_main(t_cmd *cmds, char **env);
-void	exec_main(t_cmd *cmds, t_env_var *env_list, int *last_exit_status_ptr);
+void exec_main(t_cmd *cmds, t_env_var *env_list);
 
 //free.c
 
