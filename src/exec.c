@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
+/*   Updated: 2025/08/06 22:55:30 by sionow           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -24,9 +35,8 @@ void	free_tab_exec(char **tab)
 	free(tab);
 }
 
-void	exit_free(t_pipeline *pl, t_cmd *cmds)
+void	exit_free(t_cmd *cmds)
 {
-	(void) close_pipes(pl);
 	while (cmds)
 	{
 		while (cmds->redirection)
@@ -100,16 +110,15 @@ void	close_pipes(t_pipeline *pl)
 	free(pl->pipes);
 }
 
-void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env)
+void	init_pipes(t_pipeline *pl, int num_cmds)
 {
 	int	i;
 
 	i = 0;
-	pl->num_cmds = cmds_count(cmds);
-	pl->pipes = malloc(sizeof(int *) * (pl->num_cmds - 1));
+	pl->pipes = malloc(sizeof(int *) * (num_cmds - 1));
 	if (!pl->pipes)
 		exit (1);
-	while (i < pl->num_cmds - 1)
+	while (i < num_cmds - 1)
 	{
 		pl->pipes[i] = malloc(sizeof(int) * 2);
 		if (!pl->pipes[i] || pipe(pl->pipes[i]) == -1)
@@ -119,13 +128,22 @@ void	init_pl(t_pipeline *pl, t_cmd *cmds, char **env)
 		}
 		i++;
 	}
+}
+
+void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list)
+{
+	pl->num_cmds = cmds_count(cmds);
+	if (pl->num_cmds > 1)
+		init_pipes(pl, pl->num_cmds);
+	else
+		pl->pipes = NULL;
 	pl->pids = malloc(sizeof(pid_t) * pl->num_cmds);
 	if (!pl->pids)
 	{
 		perror("pids");
 		exit(1);
 	}
-	pl->env = env;
+	pl->env = env_list;
 }
 
 void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds)
@@ -133,23 +151,23 @@ void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds)
 	if (cmds->redirection)
 	{
 		if (cmds->redirection->type == HERE_DOC)
-			heredoc_check(pl, cmds);
+			heredoc_check(cmds);
 		else if (cmds->redirection->type == REDIR_IN)
-			redir_in_check(pl, cmds);
-		else if (i > 0)
+			redir_in_check(cmds);
+		else if (i > 0 && pl->num_cmds > 1)
 			dup2(pl->pipes[i - 1][0], 0);
 		if (cmds->redirection->type == REDIR_OUT)
-			redir_out_check(pl, cmds);
+			redir_out_check(cmds);
 		else if (cmds->redirection->type == REDIR_APPEND)
-			redir_append_check(pl, cmds);
-		else if (i < pl->num_cmds - 1)
+			redir_append_check(cmds);
+		else if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			dup2(pl->pipes[i][1], 1);
 	}
 	else
 	{
-		if (i > 0)
+		if (i > 0 && pl->num_cmds > 1)
 			dup2(pl->pipes[i - 1][0], 0);
-		if (i < pl->num_cmds - 1)
+		if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			dup2(pl->pipes[i][1], 1);
 	}
 	close_pipes(pl);
@@ -190,16 +208,18 @@ char	*env_path(t_cmd *cmds)
 void	not_builtin(t_pipeline *pl, t_cmd *cmds)
 {
 	char	*path;
+	char	**env_array;
 
+	env_array = env_list_array(pl->env);
 	if (absolute_path(cmds->args[0]) == 0)
-		execve(cmds->args[0], cmds->args, pl->env);
+		execve(cmds->args[0], cmds->args, env_array);
 	else
 	{
 		path = env_path(cmds);
-		execve(path, cmds->args, pl->env);
+		execve(path, cmds->args, env_array);
 	}
 	perror("execve");
-	exit_free(pl, cmds);
+	exit_free(cmds);
 	exit(127);
 }
 
@@ -219,6 +239,8 @@ int	builtin_check(t_pipeline *pl, t_cmd *cmds)
 		return (ft_cd(get_argc(cmds), cmds->args));
 	if (((ft_strcmp(cmds->args[0], "echo") == 0)))
 		return (ft_echo(get_argc(cmds), cmds->args));
+	if (((ft_strcmp(cmds->args[0], "pwd") == 0)))
+		return (ft_pwd(get_argc(cmds)));
 	not_builtin(pl, cmds);
 	return (127);
 }
@@ -232,15 +254,17 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 	if (error_code != 0)
 	{
 		perror(cmds->args[0]);
-		exit_free(pl, cmds);
+		exit_free(cmds);
 		exit(error_code);
 	}
+	else
+		exit(error_code);
 }
 
 void	command_loop(t_pipeline *pl, t_cmd *cmds)
 {
-	int	i;
-	t_cmd *current_cmd;
+	int		i;
+	t_cmd	*current_cmd;
 
 	i = 0;
 	current_cmd = cmds;
@@ -253,36 +277,40 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 			exit (1);
 		}
 		else if (pl->pids[i] == 0)
-		{
-			free(pl->pids);
 			exec(pl, current_cmd, i);
-		}
-		if (i > 0)
+		if (i > 0 && pl->num_cmds > 1)
 			close(pl->pipes[i - 1][0]);
-		if (i < pl->num_cmds - 1)
+		if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			close(pl->pipes[i][1]);
 		current_cmd = current_cmd->next;
 		i++;
 	}
 }
 
-void	exec_main(t_cmd *cmds, char **env)
+// THIS IF FOR MY TEST U CAN COMMENT IT OUT 
+
+int get_arg_count(char **args) {
+    int count = 0;
+    while (args && args[count])
+        count++;
+    return count;
+}
+
+
+void exec_main(t_cmd *cmds, t_env_var *env_list)
 {
 	t_pipeline	pl;
 	int			i;
 	int			status;
 
-	init_pl(&pl, cmds, env);
-	command_loop(&pl, cmds);
-	
-	// Wait for all child processes to complete
 	i = 0;
+	init_pl(&pl, cmds, env_list);
+	command_loop(&pl, cmds);
 	while (i < pl.num_cmds)
 	{
 		waitpid(pl.pids[i], &status, 0);
 		i++;
 	}
-	
 	close_pipes(&pl);
 	free(pl.pids);
 }

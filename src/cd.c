@@ -6,11 +6,15 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:48 by sionow            #+#    #+#             */
-/*   Updated: 2025/07/24 13:43:57 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/02 21:48:28 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include <unistd.h>
+#include <limits.h> //for Pathmax
+#include <stdlib.h>
+#include <stdio.h>
+#include "minishell.h"
 
 int	ft_cd_error(char *path, char *to_free)
 {

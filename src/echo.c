@@ -1,4 +1,4 @@
-#include "../include/minishell.h"
+#include "minishell.h"
 
 //0 = no flag, 1 = flag found
 int	flag_checker(char *flag)
@@ -44,16 +44,16 @@ int	ft_echo(int argc, char **argv)
 	int	f;
 
 	i = 0;
-	j = 2;
+	j = 1;
 	f = 0;
-	if (argc > 2)
+	if (argc > 1)
 	{
-		if (flag_checker(argv[2]) == 1)
+		if (flag_checker(argv[1]) == 1)
 		{
 			f = 1;
 			j++;
 		}
-		if (argc > 3)
+		if (argc > 2)
 			n_skipper(argv, &j);
 		while (argv[j])
 			ft_write_lines(argv, &i, &j);

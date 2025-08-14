@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/07/25 01:08:10 by sionow           ###   ########.fr       */
+/*   Created: 2024/12/04 17:50:12 by sionow            #+#    #+#             */
+/*   Updated: 2025/07/25 01:50:29 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 char	*ft_fill_ex(char *excess)
 {

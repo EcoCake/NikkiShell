@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/22 15:16:57 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/25 01:50:45 by sionow           ###   ########.fr       */
+/*   Created: 2025/08/03 17:40:55 by sionow            #+#    #+#             */
+/*   Updated: 2025/08/03 18:07:57 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-volatile sig_atomic_t g_last_signal = 0;
-
-void handle_sigint_rl(int signal)
+int ft_pwd(int argc)
 {
-	g_last_signal = signal;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (argc == 1)
+	{
+		char	cwd[PATH_MAX];
+		
+		if (getcwd(cwd, sizeof(cwd)) != NULL)
+		{
+			write (1, cwd, ft_strlen(cwd));
+			write(1, "\n", 1);
+		}
+		else
+		{
+			perror("pwd");
+			return (1);
+		}
+		return (0);
+	}
+	return (1);
 }

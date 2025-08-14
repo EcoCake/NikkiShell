@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:29:52 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/24 14:03:25 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/06 22:35:34 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,6 @@
 
 #include <sys/types.h>
 
-typedef struct s_pipeline
-{
-	char	**env;
-	int		**pipes;
-	pid_t	*pids;
-	int		num_cmds;
-}	t_pipeline;
 
 typedef enum e_token_types
 {
@@ -68,5 +61,12 @@ typedef struct s_cmd
 } t_cmd;
 
 
+typedef struct s_pipeline
+{
+	t_env_var *env;
+	int		**pipes;
+	pid_t	*pids;
+	int		num_cmds;
+}	t_pipeline;
 
 #endif
