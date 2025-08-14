@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/06 22:48:58 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/14 22:40:12 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ t_env_var	*create_env_node(char *env_str);
 t_env_var	*init_env_list(char **envp);
 char		*get_env_value(t_env_var *env_list, const char *key);
 char		**env_list_array(t_env_var *env_list);
+
+//parent.c
+int	adoption_center(t_cmd *cmds);
+int	builtin_check_parent(t_cmd *cmds);
 
 // exec.c
 

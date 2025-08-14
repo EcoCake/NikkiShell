@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/06 22:55:30 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/14 22:38:10 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,7 +296,6 @@ int get_arg_count(char **args) {
     return count;
 }
 
-
 void exec_main(t_cmd *cmds, t_env_var *env_list)
 {
 	t_pipeline	pl;
@@ -305,12 +304,17 @@ void exec_main(t_cmd *cmds, t_env_var *env_list)
 
 	i = 0;
 	init_pl(&pl, cmds, env_list);
-	command_loop(&pl, cmds);
-	while (i < pl.num_cmds)
+	if (adoption_center(cmds) == 1 || adoption_center(cmds) == 2)
 	{
-		waitpid(pl.pids[i], &status, 0);
-		i++;
+		command_loop(&pl, cmds);
+		while (i < pl.num_cmds)
+		{
+			waitpid(pl.pids[i], &status, 0);
+			i++;
+		}
 	}
+	else
+		builtin_check_parent(cmds);
 	close_pipes(&pl);
 	free(pl.pids);
 }

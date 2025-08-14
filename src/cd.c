@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:48 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/02 21:48:28 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/14 22:04:53 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,28 +105,28 @@ int	ft_cd(int argc, char **argv)
 {
 	char	*path;
 
-	if ((argc == 2) || (argc == 3 && ft_strcmp(argv[2], "~") == 0))
+	if ((argc == 1) || (argc == 2 && ft_strcmp(argv[1], "~") == 0))
 	{
 		path = getenv("HOME"); // If he couldnt find the home there is a specific error that returns 1
 		if (path == NULL)
 			return (ft_cd_error("HOME not set\n", NULL));
 	}
-	else if (argc == 3)
+	else if (argc == 2)
 	{
-		if (ft_strcmp(argv[2], ".") == 0)
+		if (ft_strcmp(argv[1], ".") == 0)
 			path = ".";
-		else if (ft_strcmp(argv[2], "..") == 0)
+		else if (ft_strcmp(argv[1], "..") == 0)
 			path = "..";
-		else if (ft_strcmp(argv[2], "/") == 0)
+		else if (ft_strcmp(argv[1], "/") == 0)
 			path = "/";
-		else if (ft_strcmp(argv[2], "-") == 0)
+		else if (ft_strcmp(argv[1], "-") == 0)
 			path = getenv("OLDPWD"); // Same error as line 129 but replace HOME with OLDPWD (also returns 1)
-		else if (ft_paths(argv[2]) == 0 || ft_path_extra(argv[2]) == 0)
+		else if (ft_paths(argv[1]) == 0 || ft_path_extra(argv[1]) == 0)
 			return (0);
 	}
 	if (chdir(path) == -1)
-		return (ft_cd_error(argv[2], NULL));
-	return (1);
+		return (ft_cd_error(argv[1], NULL));
+	return (0);
 }
 
 // int main(int argc, char **argv)
