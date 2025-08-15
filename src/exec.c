@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/14 22:38:10 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/16 00:11:42 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ int	get_argc(t_cmd *cmds)
 int	builtin_check(t_pipeline *pl, t_cmd *cmds)
 {
 	if (ft_strcmp(cmds->args[0], "cd") == 0)
-		return (ft_cd(get_argc(cmds), cmds->args));
+		return (cd_tracker(get_argc(cmds), cmds->args, pl));
 	if (((ft_strcmp(cmds->args[0], "echo") == 0)))
 		return (ft_echo(get_argc(cmds), cmds->args));
 	if (((ft_strcmp(cmds->args[0], "pwd") == 0)))
@@ -314,7 +314,7 @@ void exec_main(t_cmd *cmds, t_env_var *env_list)
 		}
 	}
 	else
-		builtin_check_parent(cmds);
+		builtin_check_parent(cmds, &pl);
 	close_pipes(&pl);
 	free(pl.pids);
 }

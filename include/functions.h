@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/14 22:40:12 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/15 23:45:01 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 //  cd.c
 int		ft_cd_error(char *path, char *to_free);
 char	*ft_strjoinslash(char *s1, char *s2);
-int		ft_path_extra(char *str);
+int		ft_path_extra(char *str, t_pipeline *pl);
 int		ft_paths(char *str);
-int		ft_cd(int argc, char **argv);
+int		ft_cd(int argc, char **argv, t_pipeline *pl);
 
 // echo.c
 
@@ -42,7 +42,11 @@ char		**env_list_array(t_env_var *env_list);
 
 //parent.c
 int	adoption_center(t_cmd *cmds);
-int	builtin_check_parent(t_cmd *cmds);
+int	builtin_check_parent(t_cmd *cmds, t_pipeline *pl);
+
+//env_update.c
+int		cd_tracker(int argc, char **argv, t_pipeline *pl);
+void	cd_visualizer(t_pipeline *pl);
 
 // exec.c
 

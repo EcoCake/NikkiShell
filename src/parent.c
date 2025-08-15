@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 22:31:38 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/14 22:39:19 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/15 00:21:53 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int	adoption_center(t_cmd *cmds)
 	return (1);
 }
 
-int	builtin_check_parent(t_cmd *cmds)
+int	builtin_check_parent(t_cmd *cmds, t_pipeline *pl)
 {
 	if (ft_strcmp(cmds->args[0], "cd") == 0)
-		return (ft_cd(get_argc(cmds), cmds->args));
+		return (cd_tracker(get_argc(cmds), cmds->args, pl));
 	return (127);
 }

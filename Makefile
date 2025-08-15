@@ -30,6 +30,7 @@ SRCS_NAMES      = \
 	gl_utils.c	\
 	expansion.c	\
 	parent.c	\
+	env_update.c \
 
 MINISHELL_SRCS  = $(addprefix src/, $(SRCS_NAMES))
 
