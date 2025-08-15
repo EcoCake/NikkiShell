@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:48 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/15 23:55:24 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/16 00:48:05 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,11 @@ int	ft_cd(int argc, char **argv, t_pipeline *pl)
 		{	
 			path = get_env_value(pl->env, "OLDPWD"); // Same error as line 129 but replace HOME with OLDPWD (also returns 1)
 			if (path == NULL)
-				return (ft_cd_error("OLDPWD not set", NULL));
+			{
+				write (2, "cd: ", 4);
+				write (2, "OLDPWD not set\n", 16);
+				return (1);
+			}
 		}
 		else if (ft_paths(argv[1]) == 0 || ft_path_extra(argv[1], pl) == 0)
 			return (0);
