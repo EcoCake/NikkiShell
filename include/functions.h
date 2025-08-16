@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/15 23:45:01 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/16 22:53:37 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char		**env_list_array(t_env_var *env_list);
 
 //parent.c
 int	adoption_center(t_cmd *cmds);
-int	builtin_check_parent(t_cmd *cmds, t_pipeline *pl);
 
 //env_update.c
 int		cd_tracker(int argc, char **argv, t_pipeline *pl);
