@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 23:04:59 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/16 00:23:49 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/16 22:09:45 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,11 @@
 
 void	old_pwd(t_pipeline *pl)
 {
-	t_env_var *finger = pl->env;
-	char *current_pwd = get_env_value(pl->env, "PWD");
-	
+	t_env_var	*finger;
+	char		*current_pwd;
+
+	finger = pl->env;
+	current_pwd = get_env_value(pl->env, "PWD");
 	while (finger)
 	{
 		if (strncmp(finger->fullstring, "OLDPWD=", 7) == 0)
@@ -75,7 +77,7 @@ void	old_pwd(t_pipeline *pl)
 				perror("ft_strjoin");
 				finger->fullstring = ft_strdup("OLDPWD=");
 			}
-			return;
+			return ;
 		}
 		finger = finger->next;
 	}
@@ -84,14 +86,15 @@ void	old_pwd(t_pipeline *pl)
 //on successful chdir it updates pwd
 void	cd_update(t_pipeline *pl)
 {
-	t_env_var *finger = pl->env;
-	char	cwd[PATH_MAX];
+	t_env_var	*finger;
+	char		cwd[PATH_MAX];
 
+	finger = pl->env;
 	old_pwd(pl);
 	if (!getcwd(cwd, sizeof(cwd)))
 	{
 		perror("getcwd");
-		return;
+		return ;
 	}
 	while (finger)
 	{
@@ -105,13 +108,13 @@ void	cd_update(t_pipeline *pl)
 				perror("ft_strjoin failed in cd_update");
 				finger->fullstring = ft_strdup("PWD=");
 			}
-			return;
+			return ;
 		}
 		finger = finger->next;
 	}
 }
 
-int cd_tracker(int argc, char **argv, t_pipeline *pl)
+int	cd_tracker(int argc, char **argv, t_pipeline *pl)
 {
 	//(void) pl; //FOR TEST EXISTING ELSE REM LINE
 	if (ft_cd(argc, argv, pl) == 0)
@@ -122,5 +125,5 @@ int cd_tracker(int argc, char **argv, t_pipeline *pl)
 		return (0);
 	}
 	else
-	return (1);
+		return (1);
 }

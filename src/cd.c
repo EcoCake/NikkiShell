@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:48 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/16 00:48:05 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/16 22:06:59 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	ft_cd(int argc, char **argv, t_pipeline *pl)
 		else if (ft_strcmp(argv[1], "/") == 0)
 			path = "/";
 		else if (ft_strcmp(argv[1], "-") == 0)
-		{	
+		{
 			path = get_env_value(pl->env, "OLDPWD"); // Same error as line 129 but replace HOME with OLDPWD (also returns 1)
 			if (path == NULL)
 			{

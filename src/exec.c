@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/16 00:11:42 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/16 22:56:37 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,20 +263,24 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 
 void	command_loop(t_pipeline *pl, t_cmd *cmds)
 {
-	int		i;
 	t_cmd	*current_cmd;
 
-	i = 0;
+	int (i) = 0;
 	current_cmd = cmds;
 	while (i < pl->num_cmds)
 	{
-		pl->pids[i] = fork();
-		if (pl->pids[i] == -1)
+		if (adoption_center(cmds) == 1 || adoption_center(cmds) == 2)
 		{
-			perror("fork");
-			exit (1);
+			pl->pids[i] = fork();
+			if (pl->pids[i] == -1)
+			{
+				perror("fork");
+				exit (1);
+			}
+			else if (pl->pids[i] == 0)
+				exec(pl, current_cmd, i);
 		}
-		else if (pl->pids[i] == 0)
+		else
 			exec(pl, current_cmd, i);
 		if (i > 0 && pl->num_cmds > 1)
 			close(pl->pipes[i - 1][0]);
@@ -288,15 +292,15 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 }
 
 // THIS IF FOR MY TEST U CAN COMMENT IT OUT 
-
+/*
 int get_arg_count(char **args) {
-    int count = 0;
+    int	count = 0;
     while (args && args[count])
         count++;
-    return count;
-}
+    return (count);
+}*/
 
-void exec_main(t_cmd *cmds, t_env_var *env_list)
+void	exec_main(t_cmd *cmds, t_env_var *env_list)
 {
 	t_pipeline	pl;
 	int			i;
@@ -304,17 +308,12 @@ void exec_main(t_cmd *cmds, t_env_var *env_list)
 
 	i = 0;
 	init_pl(&pl, cmds, env_list);
-	if (adoption_center(cmds) == 1 || adoption_center(cmds) == 2)
+	command_loop(&pl, cmds);
+	while (i < pl.num_cmds)
 	{
-		command_loop(&pl, cmds);
-		while (i < pl.num_cmds)
-		{
-			waitpid(pl.pids[i], &status, 0);
-			i++;
-		}
+		waitpid(pl.pids[i], &status, 0);
+		i++;
 	}
-	else
-		builtin_check_parent(cmds, &pl);
 	close_pipes(&pl);
 	free(pl.pids);
 }
