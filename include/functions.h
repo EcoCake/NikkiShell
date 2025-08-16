@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/17 00:27:25 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/17 01:02:14 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ int		ft_echo(int argc, char **argv);
 // pwd.c
 int 	ft_pwd(int argc, char **argv, t_cmd *cmds);
 void	pwd_errormsg(char **argv);
+
+// env.c
+int	ft_env(int argc, char **argv, t_pipeline *pl);
 
 // env_utils.c
 

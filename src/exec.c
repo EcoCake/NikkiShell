@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/17 00:27:34 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/17 01:01:24 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,8 +241,8 @@ int	builtin_check(t_pipeline *pl, t_cmd *cmds)
 		return (ft_echo(get_argc(cmds), cmds->args));
 	if (((ft_strcmp(cmds->args[0], "pwd") == 0)))
 		return (ft_pwd(get_argc(cmds), cmds->args, cmds));
-	//if (((ft_strcmp(cmds->args[0], "env") == 0)))
-	//	return (ft_env(get_argc(cmds)));
+	if (((ft_strcmp(cmds->args[0], "env") == 0)))
+		return (ft_env(get_argc(cmds), cmds->args, pl));
 	not_builtin(pl, cmds);
 	return (127);
 }
