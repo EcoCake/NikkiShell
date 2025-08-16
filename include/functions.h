@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/16 22:53:37 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/17 00:27:25 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	ft_write_lines(char **argv, int *i, int *j);
 int		ft_echo(int argc, char **argv);
 
 // pwd.c
-int ft_pwd(int argc);
+int 	ft_pwd(int argc, char **argv, t_cmd *cmds);
+void	pwd_errormsg(char **argv);
 
 // env_utils.c
 
@@ -65,6 +66,7 @@ void	not_builtin(t_pipeline *pl, t_cmd *cmds);
 int		get_argc(t_cmd *cmds);
 int		builtin_check(t_pipeline *pl, t_cmd *cmds);
 void	exec(t_pipeline *pl, t_cmd *cmds, int i);
+void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i);
 void	command_loop(t_pipeline *pl, t_cmd *cmds);
 //void	exec_main(t_cmd *cmds, char **env);
 void exec_main(t_cmd *cmds, t_env_var *env_list);
