@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/17 01:01:24 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/18 00:19:41 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,35 +47,6 @@ void	exit_free(t_cmd *cmds)
 		free_tab_exec(cmds->args);
 		cmds = cmds->next;
 	}
-}
-
-char	**create_args(char *args1, char *args2)
-{
-	char	**args;
-
-	args = malloc(sizeof(char *) * 3);
-	if (!args)
-		return (NULL);
-	args[0] = ft_strdup(args1);
-	args[1] = ft_strdup(args2);
-	args[2] = NULL;
-	return (args);
-}
-
-void	fill_cmds(t_cmd **cmds)
-{
-	t_cmd	*first;
-	t_cmd	*second;
-
-	first = malloc(sizeof(t_cmd));
-	first->args = create_args("echo", "hello");
-	first->redirection = NULL;
-	second = malloc(sizeof(t_cmd));
-	second->args = create_args("wc", "-l");
-	second->redirection = NULL;
-	first->next = second;
-	second->next = NULL;
-	*cmds = first;
 }
 
 int	cmds_count(t_cmd *cmds)
@@ -264,8 +235,12 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 }
 void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
 {
-	int		error_code;
+	int	error_code;
+	int	save_fd_in;
+	int	save_fd_out;
 
+	save_fd_in = dup(0);
+	save_fd_out = dup(1);
 	command_redirections(i, pl, cmds);
 	error_code = builtin_check(pl, cmds);
 	if (error_code != 0)
@@ -274,6 +249,10 @@ void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
 		exit_free(cmds);
 		exit(error_code);
 	}
+	dup2(save_fd_in, 0);
+	dup2(save_fd_out, 1);
+	close(save_fd_in);
+	close(save_fd_out);
 }
 
 void	command_loop(t_pipeline *pl, t_cmd *cmds)
@@ -324,10 +303,13 @@ void	exec_main(t_cmd *cmds, t_env_var *env_list)
 	i = 0;
 	init_pl(&pl, cmds, env_list);
 	command_loop(&pl, cmds);
-	while (i < pl.num_cmds)
+	if (adoption_center(cmds) != 0)
 	{
-		waitpid(pl.pids[i], &status, 0);
-		i++;
+		while (i < pl.num_cmds)
+		{
+			waitpid(pl.pids[i], &status, 0);
+			i++;
+		}
 	}
 	close_pipes(&pl);
 	free(pl.pids);
