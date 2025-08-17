@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/16 22:56:37 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/17 01:01:24 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,9 @@ int	builtin_check(t_pipeline *pl, t_cmd *cmds)
 	if (((ft_strcmp(cmds->args[0], "echo") == 0)))
 		return (ft_echo(get_argc(cmds), cmds->args));
 	if (((ft_strcmp(cmds->args[0], "pwd") == 0)))
-		return (ft_pwd(get_argc(cmds)));
+		return (ft_pwd(get_argc(cmds), cmds->args, cmds));
+	if (((ft_strcmp(cmds->args[0], "env") == 0)))
+		return (ft_env(get_argc(cmds), cmds->args, pl));
 	not_builtin(pl, cmds);
 	return (127);
 }
@@ -259,6 +261,19 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 	}
 	else
 		exit(error_code);
+}
+void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
+{
+	int		error_code;
+
+	command_redirections(i, pl, cmds);
+	error_code = builtin_check(pl, cmds);
+	if (error_code != 0)
+	{
+		perror(cmds->args[0]);
+		exit_free(cmds);
+		exit(error_code);
+	}
 }
 
 void	command_loop(t_pipeline *pl, t_cmd *cmds)
@@ -281,7 +296,7 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 				exec(pl, current_cmd, i);
 		}
 		else
-			exec(pl, current_cmd, i);
+			exec_parent(pl, current_cmd, i);
 		if (i > 0 && pl->num_cmds > 1)
 			close(pl->pipes[i - 1][0]);
 		if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
