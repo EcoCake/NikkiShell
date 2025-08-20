@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tester.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/16 00:11:34 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/19 21:14:30 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int	main(int ac, char **av, char **envp)
 				//     if (cmd_temp) printf(" ----- PIPE TO NEXT CMD-----\n");
 				// }
 				// <<< CALL EXEC_MAIN WITH THE POINTER TO last_exit_status >>>
+				command_redirections(i, pl, cmds);
 				exec_main(commands, env_list); 
 				free_cmd_list(commands); // Free the command structure after execution
 			}

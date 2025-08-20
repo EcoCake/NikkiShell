@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 21:54:34 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/03 00:11:38 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/19 21:00:00 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,32 +55,30 @@ char	*str_append(char *dest, const char *src)
 }
 char	*expand_variable(const char *str_after_dollar, t_env_var *env_list, int last_exit_status)
 {
-	int		var_name_len;
-	char	*var_name = NULL;
-	char	*value;
-
+	int     var_name_len;
+	char    *var_name = NULL;
+	char    *value;
+	
 	if (!str_after_dollar || *str_after_dollar == '\0')
 		return(ft_strdup("$"));
-	if (*str_after_dollar == '?') //for $? last exit status
+	if (*str_after_dollar == '?')
 		return(ft_itoa(last_exit_status));
-	else if (*str_after_dollar == '$') // for $$ processid
+	else if (*str_after_dollar == '$')
 		return (ft_itoa(getpid()));
-
 	var_name_len = get_var_name_len(str_after_dollar);
 	if (var_name_len == 0)
 		return(ft_strdup("$"));
 	var_name = ft_substr(str_after_dollar, 0, var_name_len);
 	if (!var_name)
 		return NULL;
-// i am going to go crazy very soon..
 	value = get_env_value(env_list, var_name);
 	free(var_name);
 	if (value)
 		return (ft_strdup(value));
 	else
 		return(ft_strdup(""));
-	
 }
+
 char *tilde_expansion(const char *str, t_env_var *env_list)
 {
 	char *home_dir;
@@ -104,78 +102,61 @@ char *tilde_expansion(const char *str, t_env_var *env_list)
 	return  (ft_strdup(str)); // returm original string for unhandled ~
 }
 
-char	*expand_and_unquote(char *str, t_env_var *env_list, int last_exit_status)
+char *expand_and_unquote(char *str, t_env_var *env_list, int last_exit_status)
 {
-	char	*expanded_result = NULL;
-    int		i = 0;
-    int		quote_state = 0; //0 none 1 singlequotes 2 doublequotes
-    char	*temp_segment;
+    char *expanded_result = ft_strdup("");
+    int i = 0;
+    int quote_state = 0;
+    char *temp_segment;
 
-	if (!str)
-		return NULL;
-	if (ft_strlen(str) == 0)
-		return ft_strdup("");
-	expanded_result = ft_strdup("");
-	if (!expanded_result)
-		return NULL;
-//bash does ~ expansion before the variable exp, and only if the ~ is the first char
-	if (str[0] == '~' && (str[1] == '/' || str[1] == '\0'))
-	{
-		temp_segment = tilde_expansion(str, env_list);
-		if (!temp_segment) {
-		free(expanded_result);
-		return NULL;
-		}
-		free(expanded_result);
-		return temp_segment;
-	}
-	while (str[i])
-	{
-		//handling quotes by togglinh quote_state and skipping the quote char
-		if (str[i] == '\'' && quote_state == 0)
-		{
-			quote_state = 1;
-			i++;
-		}
-		else if (str[i] == '\"' && quote_state == 0)
-		{
-			quote_state = 2;
-			i++;
-		}
-		else if ((str[i] == '\'' && quote_state == 1) || (str[i] == '\"' && quote_state == 2))
-		{
-			quote_state = 0;
-			i++;
-		}
-		else if (str[i] == '$' && quote_state != 1) //var expansion not inside ''
-		{
-			i++;
-			int var_name_length = get_var_name_len(str + i); 
-				
-			temp_segment = expand_variable(str + i, env_list, last_exit_status);
-			if (!temp_segment)
-			{
-				free(expanded_result);
-				return NULL;
-			}
-			expanded_result = str_append(expanded_result, temp_segment);
-			free(temp_segment);
-			if (!expanded_result) 
-				return NULL;
-			i += var_name_length; 
-		}
-		else //normal char or char inside quotes which is not $
-		{
-			char current_char[2];
-			current_char[0] = str[i];
-			current_char[1] = '\0';
-			expanded_result = str_append(expanded_result, current_char);
-			if (!expanded_result) return NULL;
-			i++;
-		}
-		}
-		return expanded_result;
+    if (!str || !expanded_result)
+        return (NULL);
+
+    while (str[i])
+    {
+        if (str[i] == '\'' && quote_state == 0)
+        {
+            quote_state = 1;
+            i++;
+        }
+        else if (str[i] == '\"' && quote_state == 0)
+        {
+            quote_state = 2;
+            i++;
+        }
+        else if ((str[i] == '\'' && quote_state == 1) || (str[i] == '\"' && quote_state == 2))
+        {
+            quote_state = 0;
+            i++;
+        }
+        else if (str[i] == '$' && quote_state != 1)
+        {
+            i++;
+            int var_name_length = get_var_name_len(str + i);
+            temp_segment = expand_variable(str + i, env_list, last_exit_status);
+            if (!temp_segment)
+            {
+                free(expanded_result);
+                return NULL;
+            }
+            expanded_result = str_append(expanded_result, temp_segment);
+            free(temp_segment);
+            i += var_name_length;
+        }
+        else
+        {
+            char current_char[2];
+            current_char[0] = str[i];
+            current_char[1] = '\0';
+            expanded_result = str_append(expanded_result, current_char);
+            if (!expanded_result)
+                return NULL;
+            i++;
+        }
+    }
+    return expanded_result;
 }
+
 
 void	expand_cmd_args(t_cmd *cmd, t_env_var *env_list, int last_exit_status)
 {
