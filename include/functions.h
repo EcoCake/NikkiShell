@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/19 21:23:48 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/20 23:46:29 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ void	pwd_errormsg(char **argv);
 
 // env.c
 int	ft_env(int argc, char **argv, t_pipeline *pl);
+
+//unset.c
+int		checker(char *str);
+int		unset_head(char *str, t_pipeline *pl);
+void	unset_last(char *str, t_pipeline *pl);
+int		unset_env(char *str, t_pipeline *pl);
+int		ft_unset(int argc, char **argv, t_pipeline *pl);
 
 // env_utils.c
 
