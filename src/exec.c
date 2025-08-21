@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/20 23:46:38 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/19 00:56:14 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,9 @@ int	builtin_check(t_pipeline *pl, t_cmd *cmds)
 	if (ft_strcmp(cmds->args[0], "cd") == 0)
 		return (cd_tracker(get_argc(cmds), cmds->args, pl));
 	if (ft_strcmp(cmds->args[0], "unset") == 0)
-		return (ft_unset(get_argc(cmds), cmds->args, pl));
+		return (ft_unset(get_argc(cmds), cmds->args, pl, cmds));
+	if (ft_strcmp(cmds->args[0], "export") == 0)
+		return (ft_export(get_argc(cmds), cmds->args, pl));
 	if (((ft_strcmp(cmds->args[0], "echo") == 0)))
 		return (ft_echo(get_argc(cmds), cmds->args));
 	if (((ft_strcmp(cmds->args[0], "pwd") == 0)))

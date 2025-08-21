@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:24:00 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/19 20:24:42 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/07/25 01:51:53 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,18 +141,14 @@ t_token *tokenize(char *line)
 		else if (is_quote(line[i]))
 		{
 			quote_char = line[i];
-			int start = i;
 			i++;
-			while (line[i] && line[i] != quote_char)
-				i++;
-			if (line[i] != quote_char)
+			extracted_value = extract_quoted_str(line, &i, quote_char); 
+			if (!extracted_value)
 			{
 				fprintf(stderr, "syntax error: unclosed quote\n");
 				free_token_list(head);
 				return NULL;
 			}
-			i++;
-			extracted_value = ft_substr(line, start, i - start); 
 			add_token(&head, &current, extracted_value, WORD);
 		}
 		else
