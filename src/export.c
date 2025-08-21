@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 00:35:40 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/21 15:49:48 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/21 17:01:33 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,20 @@ void expsorter(char **exvar)
 	}
 }
 
+void	expprinter(char **exvar)
+{
+	int	i;
+
+	i = 0;
+	while (exvar[i])
+	{
+		write (1, "export ", 7);
+		write (1, exvar[i], ft_strlen(exvar[i]));
+		write (1, "\n", 1);
+		i++;
+	}
+}
+
 void exp_alone(t_pipeline *pl)
 {
 	char 	**exvar;
@@ -92,6 +106,7 @@ void exp_alone(t_pipeline *pl)
 		return ;
 	expfiller(exvar, pl);
 	expsorter(exvar);
+	expprinter(exvar);
 	exvar[e] = NULL;
 }
 
