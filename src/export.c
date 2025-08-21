@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 00:35:40 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/21 03:25:25 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/21 15:49:48 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,22 +85,21 @@ void exp_alone(t_pipeline *pl)
 {
 	char 	**exvar;
 	int		e;
-	int		i;
 	
-	i = 0;
 	e = expcounter(pl);
 	exvar = malloc(sizeof(char *) * (e + 1));
 	if (!exvar)
-		return (NULL);
+		return ;
 	expfiller(exvar, pl);
 	expsorter(exvar);
 	exvar[e] = NULL;
 }
 
-int ft_export(int argc, char **argv, t_pipeline *pl)
+int ft_export(int argc, t_pipeline *pl)
 {
 	if (argc == 1)
 	{
 		exp_alone(pl);
 	}
+	return (0);
 } 

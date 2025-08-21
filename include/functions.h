@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/21 08:43:46 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/21 15:49:53 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,16 @@ int	ft_env(int argc, char **argv, t_pipeline *pl);
 //unset.c
 int		unset_head(char *str, t_pipeline *pl);
 void	unset_last(char *str, t_pipeline *pl);
-void		unset_env(char *str, t_pipeline *pl);
+void	unset_env(char *str, t_pipeline *pl);
 int		ft_unset(int argc, char **argv, t_pipeline *pl);
+
+//export.c
+int 	ft_export(int argc, t_pipeline *pl);
+void 	exp_alone(t_pipeline *pl);
+void 	expsorter(char **exvar);
+void	expfiller(char **exvar, t_pipeline *pl);
+int 	expcounter(t_pipeline *pl);
+int 	ft_strchre(char *str, char c);
 
 // env_utils.c
 
