@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/21 08:43:46 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/22 00:00:13 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,16 @@ int	ft_env(int argc, char **argv, t_pipeline *pl);
 //unset.c
 int		unset_head(char *str, t_pipeline *pl);
 void	unset_last(char *str, t_pipeline *pl);
-void		unset_env(char *str, t_pipeline *pl);
+void	unset_env(char *str, t_pipeline *pl);
 int		ft_unset(int argc, char **argv, t_pipeline *pl);
+
+//export.c
+int 	ft_export(int argc, char **argv, t_pipeline *pl);
+void 	exp_alone(t_pipeline *pl);
+void 	expsorter(char **exvar);
+void	expfiller(int argc, char **argv, char **exvar, t_pipeline *pl);
+int 	expcounter(int argc, t_pipeline *pl);
+int 	ft_strchre(char *str, char c);
 
 // env_utils.c
 
@@ -68,7 +76,7 @@ int		cmds_count(t_cmd *cmds);
 void	close_pipes(t_pipeline *pl);
 void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list);
 void	init_pipes(t_pipeline *pl, int num_cmds);
-void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds);
+void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds, int parent);
 int		absolute_path(char *cmd);
 char	*env_path(t_cmd *cmds);
 void	not_builtin(t_pipeline *pl, t_cmd *cmds);

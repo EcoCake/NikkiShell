@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/19 00:56:14 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/22 00:33:33 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,22 @@ void	init_pipes(t_pipeline *pl, int num_cmds)
 	}
 }
 
+int	children_counter(t_cmd *cmds)
+{
+	t_cmd	*finger;
+	int		i;
+
+	finger = cmds;
+	i = 0;
+	while (finger)
+	{
+		if (adoption_center(finger) != 0)
+			i++;
+		finger = finger->next;
+	}
+	return (i);
+}
+
 void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list)
 {
 	pl->num_cmds = cmds_count(cmds);
@@ -108,16 +124,18 @@ void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list)
 		init_pipes(pl, pl->num_cmds);
 	else
 		pl->pipes = NULL;
-	pl->pids = malloc(sizeof(pid_t) * pl->num_cmds);
+	pl->num_pids = children_counter(cmds);
+	pl->pids = malloc(sizeof(pid_t) * pl->num_pids);
 	if (!pl->pids)
 	{
 		perror("pids");
 		exit(1);
 	}
 	pl->env = env_list;
+	pl->p_m = 0;
 }
 
-void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds)
+void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds, int parent)
 {
 	if (cmds->redirection)
 	{
@@ -141,7 +159,8 @@ void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds)
 		if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			dup2(pl->pipes[i][1], 1);
 	}
-	close_pipes(pl);
+	if (parent == 0)
+		close_pipes(pl);
 }
 
 int	absolute_path(char *cmd)
@@ -209,7 +228,7 @@ int	builtin_check(t_pipeline *pl, t_cmd *cmds)
 	if (ft_strcmp(cmds->args[0], "cd") == 0)
 		return (cd_tracker(get_argc(cmds), cmds->args, pl));
 	if (ft_strcmp(cmds->args[0], "unset") == 0)
-		return (ft_unset(get_argc(cmds), cmds->args, pl, cmds));
+		return (ft_unset(get_argc(cmds), cmds->args, pl));
 	if (ft_strcmp(cmds->args[0], "export") == 0)
 		return (ft_export(get_argc(cmds), cmds->args, pl));
 	if (((ft_strcmp(cmds->args[0], "echo") == 0)))
@@ -226,7 +245,7 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 {
 	int		error_code;
 
-	command_redirections(i, pl, cmds);
+	command_redirections(i, pl, cmds, 0);
 	error_code = builtin_check(pl, cmds);
 	if (error_code != 0)
 	{
@@ -245,7 +264,7 @@ void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
 
 	save_fd_in = dup(0);
 	save_fd_out = dup(1);
-	command_redirections(i, pl, cmds);
+	command_redirections(i, pl, cmds, 1);
 	error_code = builtin_check(pl, cmds);
 	if (error_code != 0)
 	{
@@ -267,16 +286,17 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 	current_cmd = cmds;
 	while (i < pl->num_cmds)
 	{
-		if (adoption_center(cmds) == 1 || adoption_center(cmds) == 2)
+		if (adoption_center(current_cmd) != 0)
 		{
-			pl->pids[i] = fork();
-			if (pl->pids[i] == -1)
+			pl->pids[pl->p_m] = fork();
+			if (pl->pids[pl->p_m] == -1)
 			{
 				perror("fork");
 				exit (1);
 			}
-			else if (pl->pids[i] == 0)
+			else if (pl->pids[pl->p_m] == 0)
 				exec(pl, current_cmd, i);
+			pl->p_m++;
 		}
 		else
 			exec_parent(pl, current_cmd, i);
@@ -307,13 +327,10 @@ void	exec_main(t_cmd *cmds, t_env_var *env_list)
 	i = 0;
 	init_pl(&pl, cmds, env_list);
 	command_loop(&pl, cmds);
-	if (adoption_center(cmds) != 0)
+	while (pl.num_cmds > 1 && i < pl.num_pids)
 	{
-		while (i < pl.num_cmds)
-		{
-			waitpid(pl.pids[i], &status, 0);
-			i++;
-		}
+		waitpid(pl.pids[i], &status, 0);
+		i++;
 	}
 	close_pipes(&pl);
 	free(pl.pids);

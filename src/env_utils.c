@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:48:44 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/25 01:50:14 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/21 23:54:16 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ char **env_list_array(t_env_var *env_list)
 		count++;
 		temp = temp->next;
 	}
-	env_array = malloc(sizeof(char *) * count + 1);
+	env_array = malloc(sizeof(char *) * (count + 1));
 	if (!env_array)
 	{
 		perror("malloc fail for env array\n");
@@ -129,5 +129,4 @@ char **env_list_array(t_env_var *env_list)
 	}
 	env_array[count] = NULL;
 	return (env_array);
-	
 }
