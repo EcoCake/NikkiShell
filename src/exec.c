@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/23 16:49:23 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/23 18:04:49 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,14 @@ void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list)
 
 void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds, int parent)
 {
-	if (cmds->redirection)
+	if (!cmds->redirection)
+	{
+		if (i > 0 && pl->num_cmds > 1)
+			dup2(pl->pipes[i - 1][0], 0);
+		if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
+			dup2(pl->pipes[i][1], 1);
+	}
+	while (cmds->redirection)
 	{
 		if (cmds->redirection->type == HERE_DOC)
 			heredoc_check(cmds);
@@ -152,13 +159,7 @@ void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds, int parent)
 			redir_append_check(cmds);
 		else if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			dup2(pl->pipes[i][1], 1);
-	}
-	else
-	{
-		if (i > 0 && pl->num_cmds > 1)
-			dup2(pl->pipes[i - 1][0], 0);
-		if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
-			dup2(pl->pipes[i][1], 1);
+		cmds->redirection = cmds->redirection->next;
 	}
 	if (parent == 0)
 		close_pipes(pl);
@@ -207,10 +208,16 @@ void	not_builtin(t_pipeline *pl, t_cmd *cmds)
 	else
 	{
 		path = env_path(cmds);
+		if (!path)
+			path = ft_strdup("");
 		execve(path, cmds->args, env_array);
+		free(path);
 	}
 	perror("execve");
-	exit_free(cmds);
+	free(pl->pids);
+	free_cmd_list(cmds);
+	free_env_array(env_array);
+	free_env_list(pl->env);
 	exit(127);
 }
 
@@ -252,32 +259,51 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 	error_code = builtin_check(pl, cmds);
 	if (error_code != 0)
 	{
-		perror(cmds->args[0]);
-		exit_free(cmds);
+		if (adoption_center(cmds) == 1)
+			perror(cmds->args[0]);
+		free_cmd_list(cmds);
+		free(pl->pids);
 		exit(error_code);
 	}
 	else
+	{
+		free_cmd_list(cmds);
+		free(pl->pids);
+		free_env_list(pl->env);
 		exit(error_code);
+	}
 }
+
+void	restore_fds(int save_fd_in, int save_fd_out, char *cmds)
+{
+	if (ft_strcmp(cmds, "exit") != 0)
+	{
+		dup2(save_fd_in, 0);
+		dup2(save_fd_out, 1);
+		close(save_fd_in);
+		close(save_fd_out);
+	}
+}
+
 void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
 {
 	int	save_fd_in;
 	int	save_fd_out;
 
-	save_fd_in = dup(0);
-	save_fd_out = dup(1);
+	if (ft_strcmp(cmds->args[0], "exit") != 0)
+	{
+		save_fd_in = dup(0);
+		save_fd_out = dup(1);
+	}
 	command_redirections(i, pl, cmds, 1);
 	pl->extcode = builtin_check(pl, cmds);
 	if (pl->extcode != 0 && ft_strcmp(cmds->args[0], "exit") != 0)
 	{
 		perror(cmds->args[0]);
-		exit_free(cmds);
+		free_cmd_list(cmds);
 		exit(pl->extcode);
 	}
-	dup2(save_fd_in, 0);
-	dup2(save_fd_out, 1);
-	close(save_fd_in);
-	close(save_fd_out);
+	restore_fds(save_fd_in, save_fd_out, cmds->args[0]);
 }
 
 void	command_loop(t_pipeline *pl, t_cmd *cmds)
@@ -329,7 +355,7 @@ int	exec_main(t_cmd *cmds, t_env_var *env_list)
 	i = 0;
 	init_pl(&pl, cmds, env_list);
 	command_loop(&pl, cmds);
-	while (pl.num_cmds > 1 && i < pl.num_pids)
+	while (i < pl.num_pids)
 	{
 		waitpid(pl.pids[i], &status, 0);
 		i++;
