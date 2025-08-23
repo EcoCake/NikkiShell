@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/22 00:33:33 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/23 16:49:23 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int	children_counter(t_cmd *cmds)
 
 void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list)
 {
+	pl->extcode = 0;
 	pl->num_cmds = cmds_count(cmds);
 	if (pl->num_cmds > 1)
 		init_pipes(pl, pl->num_cmds);
@@ -231,6 +232,8 @@ int	builtin_check(t_pipeline *pl, t_cmd *cmds)
 		return (ft_unset(get_argc(cmds), cmds->args, pl));
 	if (ft_strcmp(cmds->args[0], "export") == 0)
 		return (ft_export(get_argc(cmds), cmds->args, pl));
+	if (ft_strcmp(cmds->args[0], "exit") == 0)
+		return (ft_exit(get_argc(cmds), cmds->args, pl, cmds));
 	if (((ft_strcmp(cmds->args[0], "echo") == 0)))
 		return (ft_echo(get_argc(cmds), cmds->args));
 	if (((ft_strcmp(cmds->args[0], "pwd") == 0)))
@@ -258,19 +261,18 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 }
 void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
 {
-	int	error_code;
 	int	save_fd_in;
 	int	save_fd_out;
 
 	save_fd_in = dup(0);
 	save_fd_out = dup(1);
 	command_redirections(i, pl, cmds, 1);
-	error_code = builtin_check(pl, cmds);
-	if (error_code != 0)
+	pl->extcode = builtin_check(pl, cmds);
+	if (pl->extcode != 0 && ft_strcmp(cmds->args[0], "exit") != 0)
 	{
 		perror(cmds->args[0]);
 		exit_free(cmds);
-		exit(error_code);
+		exit(pl->extcode);
 	}
 	dup2(save_fd_in, 0);
 	dup2(save_fd_out, 1);
@@ -318,7 +320,7 @@ int get_arg_count(char **args) {
     return (count);
 }*/
 
-void	exec_main(t_cmd *cmds, t_env_var *env_list)
+int	exec_main(t_cmd *cmds, t_env_var *env_list)
 {
 	t_pipeline	pl;
 	int			i;
@@ -334,6 +336,7 @@ void	exec_main(t_cmd *cmds, t_env_var *env_list)
 	}
 	close_pipes(&pl);
 	free(pl.pids);
+	return (pl.extcode);
 }
 
 // int	main(int argc, char **argv, char **env)
