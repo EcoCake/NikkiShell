@@ -6,56 +6,11 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 23:04:59 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/16 22:09:45 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/23 18:35:34 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//stupid ai visualizer
-/*void	cd_visualizer(t_pipeline *pl)
-{
-	printf("=== ENVIRONMENT VARIABLES ===\n");
-	
-	// Safety checks to prevent segfault
-	if (!pl)
-	{
-		printf("ERROR: Pipeline is NULL\n");
-		return;
-	}
-	
-	if (!pl->env)
-	{
-		printf("ERROR: Environment list is NULL\n");
-		return;
-	}
-
-	t_env_var *finger = pl->env;
-	int count = 0;
-
-	while (finger)
-	{
-		if (!finger->fullstring)
-		{
-			printf("WARNING: Empty environment variable at position %d\n", count);
-		}
-		else
-		{
-			printf("[%d] %s\n", count, finger->fullstring);
-		}
-		finger = finger->next;
-		count++;
-		
-		// Safety check for infinite loops
-		if (count > 500)
-		{
-			printf("ERROR: Too many environment variables (possible loop)\n");
-			break;
-		}
-	}
-	
-	printf("=== TOTAL: %d variables ===\n", count);
-}*/
 
 void	old_pwd(t_pipeline *pl)
 {
@@ -83,7 +38,6 @@ void	old_pwd(t_pipeline *pl)
 	}
 }
 
-//on successful chdir it updates pwd
 void	cd_update(t_pipeline *pl)
 {
 	t_env_var	*finger;
@@ -116,12 +70,9 @@ void	cd_update(t_pipeline *pl)
 
 int	cd_tracker(int argc, char **argv, t_pipeline *pl)
 {
-	//(void) pl; //FOR TEST EXISTING ELSE REM LINE
 	if (ft_cd(argc, argv, pl) == 0)
 	{
-		//cd_visualizer(pl); //FOR TEST ELSE COMMENTED
 		cd_update(pl);
-		//cd_visualizer(pl);
 		return (0);
 	}
 	else

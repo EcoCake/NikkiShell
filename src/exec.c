@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/23 18:04:49 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/23 18:54:13 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,8 @@ void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
 	pl->extcode = builtin_check(pl, cmds);
 	if (pl->extcode != 0 && ft_strcmp(cmds->args[0], "exit") != 0)
 	{
-		perror(cmds->args[0]);
+		if (adoption_center(cmds) == 1)
+			perror(cmds->args[0]);
 		free_cmd_list(cmds);
 		exit(pl->extcode);
 	}

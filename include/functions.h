@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/23 16:49:14 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/23 18:49:39 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include "minishell.h"
 
 //  cd.c
+int		error_msg_cd();
+void	linesavercd(t_pipeline *pl, char *path);
 int		ft_cd_error(char *path, char *to_free);
 char	*ft_strjoinslash(char *s1, char *s2);
 int		ft_path_extra(char *str, t_pipeline *pl);
