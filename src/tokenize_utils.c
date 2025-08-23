@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:45:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/25 01:50:50 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/23 21:34:21 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,25 +73,26 @@ char *extract_word(const char *line, int *position)
 //also hafta manually free this shit GOTTA REMEMBER
 char *extract_quoted_str(const char *line, int *position, char quote)
 {
-	int start;
-	int len;
-	char *extracted_line;
-	len = 0;
-	start = *position;
+    int start;
+    int len;
+    char *extracted_line;
 
-	while (line[*position] && line[*position] != quote)
-	{
-		len++;
-		(*position)++;
-	}
-	if (line[*position] != quote)
-	{
-		printf("Error, Unclosed quote '%c'\n", quote);
-		return NULL;
-	}
-	extracted_line = ft_substr(line, start, len);
-	(*position)++;
-	return (extracted_line);	
+    start = *position; // - 1; start one position before the quote
+    len = 0;
+    while (line[*position] && line[*position] != quote)
+    {
+        len++;
+        (*position)++;
+    }
+    if (line[*position] != quote)
+    {
+        printf("Error, Unclosed quote '%c'\n", quote);
+        return NULL;
+    }
+    (*position)++; // this skips the closing quote
+    //len += 2; // add 2 for the two quotes
+    extracted_line = ft_substr(line, start, len);
+    return (extracted_line);
 }
 
 char *extract_file_delimiter(const char *line, int *position)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/23 16:49:14 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/23 21:37:22 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ char	*extract_file_delimiter(const char *line, int *position);
 t_token_types	t_type(const char *str);
 void			add_token(t_token **head, t_token **current, char *value, t_token_types type);
 t_token			*tokenize(char *line);
+
 
 //expansion.c
 
