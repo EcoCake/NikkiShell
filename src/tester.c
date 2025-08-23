@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/21 08:47:38 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/23 16:51:00 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int main(int ac, char **av, char **envp)
 			expand_cmd_args(commands, env_list, last_exit_status);
 			expand_redirs(commands, env_list, last_exit_status);
 			//exec command which has the expanded args
-			exec_main(commands, env_list);
+			last_exit_status = exec_main(commands, env_list);
 
 			free_cmd_list(commands);
 		}
