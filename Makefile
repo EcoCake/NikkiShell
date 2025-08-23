@@ -29,6 +29,7 @@ SRCS_NAMES      = \
 	env.c		\
 	unset.c		\
 	export.c	\
+	exit.c		\
 	get_line.c	\
 	gl_utils.c	\
 	expansion.c	\

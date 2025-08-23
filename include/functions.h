@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/22 00:00:13 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/23 03:21:04 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ int	adoption_center(t_cmd *cmds);
 //env_update.c
 int		cd_tracker(int argc, char **argv, t_pipeline *pl);
 void	cd_visualizer(t_pipeline *pl);
+
+
+//exit.c
+int	ft_exit(int argc, char **argv, t_pipeline *pl);
+int	numchecker(char *str);
 
 // exec.c
 
