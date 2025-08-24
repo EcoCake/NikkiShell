@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:45:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/25 01:50:50 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/24 14:17:06 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ char *extract_word(const char *line, int *position)
 //also hafta manually free this shit GOTTA REMEMBER
 char *extract_quoted_str(const char *line, int *position, char quote)
 {
-	int start;
-	int len;
-	char *extracted_line;
-	len = 0;
-	start = *position;
+	int		start;
+	int		len;
+	char	*extracted_line;
 
+	start = (*position) - 1; 
+	len = 1;
 	while (line[*position] && line[*position] != quote)
 	{
 		len++;
@@ -88,10 +88,11 @@ char *extract_quoted_str(const char *line, int *position, char quote)
 	{
 		printf("Error, Unclosed quote '%c'\n", quote);
 		return NULL;
-	}
+	}	
+	len++; 
+	(*position)++; 
 	extracted_line = ft_substr(line, start, len);
-	(*position)++;
-	return (extracted_line);	
+	return (extracted_line);
 }
 
 char *extract_file_delimiter(const char *line, int *position)
