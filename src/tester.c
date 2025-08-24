@@ -6,12 +6,11 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/23 16:51:00 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/24 15:39:16 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int main(int ac, char **av, char **envp)
 {
@@ -41,7 +40,7 @@ int main(int ac, char **av, char **envp)
 				last_exit_status = 130;
 			g_last_signal = 0;
 		}
-		line = readline("nikkishell$ ");	
+		line = readline("nikkishell$ ");
 		if (g_last_signal != 0)
 		{
 			if (line)
@@ -92,7 +91,6 @@ int main(int ac, char **av, char **envp)
 		}
 		free(line);
 	}
-		
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	free_env_list(env_list);

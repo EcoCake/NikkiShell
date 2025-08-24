@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:29:52 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/23 00:06:37 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/24 16:35:17 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ typedef struct s_pipeline
 	int		num_pids;
 	int		p_m;
 	int		extcode;
+	int		og_in;
+	int		og_out;
 }	t_pipeline;
 
 #endif
