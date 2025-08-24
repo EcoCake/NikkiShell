@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/24 18:27:38 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/24 20:54:09 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list)
 		exit(1);
 	}
 	pl->env = env_list;
+	pl->head = cmds;
 	pl->p_m = 0;
 }
 
@@ -278,7 +279,7 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 	}
 	else
 	{
-		free_cmd_list(cmds);
+		free_cmd_list(pl->head);
 		free(pl->pids);
 		free_env_list(pl->env);
 		exit(error_code);
@@ -334,9 +335,11 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 			else if (pl->pids[pl->p_m] == 0)
 			{
 				if (current_cmd->redirection && current_cmd->redirection->type == HERE_DOC)
-					heredoc_check(cmds, pl);
+					heredoc_check(current_cmd, pl);
 				exec(pl, current_cmd, i);
 			}
+			if (current_cmd->redirection && current_cmd->redirection->type == HERE_DOC)
+				waitpid(pl->pids[pl->p_m], NULL, 0);
 			pl->p_m++;
 		}
 		else

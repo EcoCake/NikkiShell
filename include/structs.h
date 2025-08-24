@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:29:52 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/24 16:35:17 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/24 20:33:18 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,16 @@ typedef struct s_cmd
 
 typedef struct s_pipeline
 {
-	t_env_var *env;
-	int		**pipes;
-	pid_t	*pids;
-	int		num_cmds;
-	int		num_pids;
-	int		p_m;
-	int		extcode;
-	int		og_in;
-	int		og_out;
+	t_env_var 	*env;
+	t_cmd		*head;
+	int			**pipes;
+	pid_t		*pids;
+	int			num_cmds;
+	int			num_pids;
+	int			p_m;
+	int			extcode;
+	int			og_in;
+	int			og_out;
 }	t_pipeline;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:02:59 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/24 18:33:57 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/24 20:49:30 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	heredoc_check(t_cmd *cmds, t_pipeline *pl)
 {
 	int		fd[2];
 
-	ft_putstr_fd("FDP\n\n", 2);
 	if (pipe(fd) == -1)
 	{
 		exit_free(cmds);
