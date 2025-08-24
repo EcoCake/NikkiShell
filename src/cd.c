@@ -6,14 +6,10 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:48 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/16 22:06:59 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/23 18:59:29 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <limits.h> //for Pathmax
-#include <stdlib.h>
-#include <stdio.h>
 #include "minishell.h"
 
 int	ft_cd_error(char *path, char *to_free)
@@ -53,7 +49,14 @@ char	*ft_strjoinslash(char *s1, char *s2)
 	return (finals);
 }
 
-	//line 70 & 77(getcwd(cwd, sizeof(cwd));)fills cwd
+char	*fill_path(char *str)
+{
+	char	cwd[PATH_MAX];
+
+	getcwd(cwd, sizeof(cwd));
+	return (ft_strjoinslash(cwd, &str[2]));
+}
+
 int	ft_path_extra(char *str, t_pipeline *pl)
 {
 	char	cwd[PATH_MAX];
@@ -61,10 +64,7 @@ int	ft_path_extra(char *str, t_pipeline *pl)
 
 	path = NULL;
 	if (str[0] == '.' && str[1] == '/' && str[2] >= 32 && str[2] <= 126)
-	{
-		getcwd(cwd, sizeof(cwd));
-		path = ft_strjoinslash(cwd, &str[2]);
-	}
+		path = fill_path(str);
 	else if (str[0] == '.' && str[1] == '.' && str[2] == '/'
 		&& (str[3] >= 32 && str[3] <= 126))
 	{
@@ -77,7 +77,7 @@ int	ft_path_extra(char *str, t_pipeline *pl)
 		&& (str[2] >= 32 && str[2] <= 126))
 		path = ft_strjoinslash(get_env_value(pl->env, "HOME"), &str[1]);
 	if (get_env_value(pl->env, "HOME") == NULL)
-		return (ft_cd_error("HOME not set\n", path)); //Same as line 129
+		return (ft_cd_error("HOME not set\n", path));
 	if (path && chdir(path) == -1)
 		return (ft_cd_error(str, path));
 	free(path);
@@ -102,6 +102,20 @@ int	ft_paths(char *str)
 	return (1);
 }
 
+int	error_msg_cd()
+{
+	write (2, "cd: ", 4);
+	write (2, "OLDPWD not set\n", 16);
+	return (1);
+}
+
+void	linesavercd(t_pipeline *pl, char *path)
+{
+	path = get_env_value(pl->env, "OLDPWD");
+	if (path == NULL)
+		error_msg_cd();
+}
+
 int	ft_cd(int argc, char **argv, t_pipeline *pl)
 {
 	char	*path;
@@ -109,7 +123,7 @@ int	ft_cd(int argc, char **argv, t_pipeline *pl)
 	path = NULL;
 	if ((argc == 1) || (argc == 2 && ft_strcmp(argv[1], "~") == 0))
 	{
-		path = get_env_value(pl->env, "HOME"); // If he couldnt find the home there is a specific error that returns 1
+		path = get_env_value(pl->env, "HOME");
 		if (path == NULL)
 			return (ft_cd_error("HOME not set\n", NULL));
 	}
@@ -122,15 +136,7 @@ int	ft_cd(int argc, char **argv, t_pipeline *pl)
 		else if (ft_strcmp(argv[1], "/") == 0)
 			path = "/";
 		else if (ft_strcmp(argv[1], "-") == 0)
-		{
-			path = get_env_value(pl->env, "OLDPWD"); // Same error as line 129 but replace HOME with OLDPWD (also returns 1)
-			if (path == NULL)
-			{
-				write (2, "cd: ", 4);
-				write (2, "OLDPWD not set\n", 16);
-				return (1);
-			}
-		}
+			linesavercd(pl, path);
 		else if (ft_paths(argv[1]) == 0 || ft_path_extra(argv[1], pl) == 0)
 			return (0);
 	}
@@ -138,17 +144,3 @@ int	ft_cd(int argc, char **argv, t_pipeline *pl)
 		return (ft_cd_error(argv[1], NULL));
 	return (0);
 }
-
-// int main(int argc, char **argv)
-// {
-//     // Call your ft_cd function with the command-line arguments
-//     ft_cd(argc, argv);
-
-//     // Print the current working directory after attempting to change it
-//     char cwd[PATH_MAX];
-//     if (getcwd(cwd, sizeof(cwd)) != NULL)
-//         printf("Current directory: %s\n", cwd);
-//     else
-//         perror("getcwd() error");
-//     return (0);
-// }
