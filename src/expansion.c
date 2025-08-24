@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 21:54:34 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/23 21:03:14 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/24 14:19:21 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,63 +103,58 @@ char *tilde_expansion(const char *str, t_env_var *env_list)
 	}
 	return  (ft_strdup(str)); // returm original string for unhandled ~
 }
-
 char    *expand_and_unquote(char *str, t_env_var *env_list, int last_exit_status)
 {
-    char    *expanded_result = NULL;
-    int     i = 0;
-    int     in_squote = 0;
-    int     in_dquote = 0;
-    char    *temp_segment;
-    char    temp_char[2];
+	char	*final_str;
+	char	*var_value;
+	int		i;
+	int		in_squote;
+	int		in_dquote;
 
-    if (!str || ft_strlen(str) == 0)
-        return ft_strdup("");
-    expanded_result = ft_strdup("");
-    if (!expanded_result)
-        return NULL;
-    
-    while (str[i])
-    {
-        if (str[i] == '\'' && in_dquote == 0)
-        {
-            in_squote = !in_squote;
-            i++;
-            continue;
-        }
-        if (str[i] == '"' && in_squote == 0)
-        {
-            in_dquote = !in_dquote;
-            i++;
-            continue;
-        }
-        
-        if (str[i] == '$' && in_squote == 0)
-        {
-            i++;
-            int var_name_length = get_var_name_len(str + i); 
-            temp_segment = expand_variable(str + i, env_list, last_exit_status);
-            if (!temp_segment) {
-                free(expanded_result);
-                return NULL;
-            }
-            expanded_result = str_append(expanded_result, temp_segment);
-            free(temp_segment);
-            if (!expanded_result) 
-                return NULL;
-            i += var_name_length; 
-        }
-        else
-        {
-            temp_char[0] = str[i];
-            temp_char[1] = '\0';
-            expanded_result = str_append(expanded_result, temp_char);
-            if (!expanded_result)
-                return NULL;
-            i++;
-        }
-    }
-    return expanded_result;
+	if (!str)
+		return (NULL);
+	final_str = ft_strdup("");
+	if (!final_str)
+		return (NULL);
+	i = 0;
+	in_squote = 0;
+	in_dquote = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'' && !in_dquote)
+		{
+			in_squote = !in_squote;
+			i++;
+			continue;
+		}
+		if (str[i] == '"' && !in_squote)
+		{
+			in_dquote = !in_dquote;
+			i++;
+			continue;
+		}
+		if (str[i] == '$' && !in_squote)
+		{
+			int var_len = get_var_name_len(&str[i + 1]);
+			var_value = expand_variable(&str[i + 1], env_list, last_exit_status);
+			if (!var_value)
+			{
+				free(final_str);
+				return (NULL);
+			}
+			final_str = str_append(final_str, var_value);
+			free(var_value);
+			i += var_len + 1;
+		}
+		else
+		{
+			char temp_char_str[2] = {0};
+			temp_char_str[0] = str[i];
+			final_str = str_append(final_str, temp_char_str);
+			i++;
+		}
+	}
+	return (final_str);
 }
 
 void	expand_cmd_args(t_cmd *cmd, t_env_var *env_list, int last_exit_status)
