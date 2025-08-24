@@ -17,6 +17,8 @@
 #include "minishell.h"
 
 //  cd.c
+int		error_msg_cd();
+void	linesavercd(t_pipeline *pl, char *path);
 int		ft_cd_error(char *path, char *to_free);
 char	*ft_strjoinslash(char *s1, char *s2);
 int		ft_path_extra(char *str, t_pipeline *pl);
