@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/24 17:14:46 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/25 13:28:21 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,5 +179,20 @@ void	expand_cmd_args(t_cmd *cmd, t_env_var *env_list, int last_exit_status);
 
 //goes thru the t_cmd->redirection list and puts the expansion and unquote to the file part of each redir node
 void	expand_redirs(t_cmd *cmd, t_env_var *env_list, int last_exit_status);
+
+
+//tokenize norm
+
+
+int	init_tokenize_context(t_tokenize_context *context,
+		t_token **head, t_token **current, char *line);
+int	handle_redir_heredoc(t_tokenize_context *context);
+int	process_token(t_tokenize_context *context, char *token_str,
+		t_token_types type, int len);
+int	handle_pipe(t_tokenize_context *context);
+int	handle_quoted_str(t_tokenize_context *context);
+int	handle_word(t_tokenize_context *context);
+int	handle_quotes_words(t_tokenize_context *context);
+
 
 #endif
