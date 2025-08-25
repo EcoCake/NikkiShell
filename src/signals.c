@@ -6,13 +6,21 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:16:57 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/25 01:50:45 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/24 17:14:26 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 volatile sig_atomic_t g_last_signal = 0;
+
+void	signalhandler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_last_signal = SIGINT;
+	}
+}
 
 void handle_sigint_rl(int signal)
 {

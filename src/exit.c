@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 03:23:52 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/23 16:53:05 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/24 16:39:51 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,7 @@ int	ft_exit(int argc, char **argv, t_pipeline *pl, t_cmd *cmds)
 	close_pipes(pl);
 	free_env_list(pl->env);
 	free_cmd_list(cmds);
+	close(pl->og_in);
+	close(pl->og_out);
 	exit(pl->extcode);
 }

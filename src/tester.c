@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 int main(int ac, char **av, char **envp)
 {
 	(void)ac;
@@ -88,7 +87,6 @@ int main(int ac, char **av, char **envp)
 		}
 		free(line);
 	}
-		
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	free_env_list(env_list);

@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/23 21:37:22 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/24 17:14:46 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,8 @@ t_cmd	*parse_tokens(t_token *tokens);
 
 //redirs.c
 
-void	read_until_limiter(int fd, char *limiter);
-void	heredoc_check(t_cmd *cmds);
+int		read_until_limiter(int fd, char *limiter);
+void	heredoc_check(t_cmd *cmds, t_pipeline *pl);
 void	redir_in_check(t_cmd *cmds);
 void	redir_out_check(t_cmd *cmds);
 void	redir_append_check(t_cmd *cmds);
@@ -140,6 +140,7 @@ void	redir_append_check(t_cmd *cmds);
 
 extern volatile sig_atomic_t g_last_signal;
 void	handle_sigint_rl(int signal);
+void	signalhandler(int sig);
 
 // tokenize_utils.c
 
