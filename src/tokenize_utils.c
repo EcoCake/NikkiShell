@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:45:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/25 13:29:49 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/25 13:36:23 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	is_operator(char c)
 		return (1);
 	return (0);
 }
+
 int	is_word_char(char c)
 {
-    return !(is_space(c) || is_operator(c) || is_quote(c) || c == '\0');
+	return (!(is_space(c) || is_operator(c) || is_quote(c) || c == '\0'));
 }

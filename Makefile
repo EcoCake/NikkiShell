@@ -13,13 +13,18 @@ READLINE_FLAGS  = -lreadline
 
 # --- Source Files ---
 SRCS_NAMES      = \
-    tester.c \
-    free.c \
-    signals.c \
-    tokenize_utils.c \
-    tokenize.c \
-    env_utils.c \
+	tester.c \
+	free.c \
+	free1.c \
+	signals.c \
+	tokenize_utils.c \
+	tokenize_utils1.c \
+	tokenize_utils2.c \
+	tokenize.c \
+	env_utils.c \
 	parser_utils.c \
+	parser_utils1.c \
+	parser_utils2.c \
 	parser.c \
 	exec.c	\
 	redirs.c	\

@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/25 13:28:21 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/25 18:03:03 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,22 @@ int	handle_pipe(t_tokenize_context *context);
 int	handle_quoted_str(t_tokenize_context *context);
 int	handle_word(t_tokenize_context *context);
 int	handle_quotes_words(t_tokenize_context *context);
+
+//parse utils 1
+
+int	handle_first_cmd(t_cmd **head, t_cmd **current_cmd, t_token **tokens);
+int	handle_args(t_cmd *current_cmd, t_token **tokens);
+int	handle_redirections(t_cmd *current_cmd, t_token **tokens);
+int	handle_pipe_and_new_cmd(t_cmd **head, t_cmd **current_cmd, t_token **tokens);
+
+//parser utils 2
+
+char	**copy_and_free(char **args, int size);
+int	dup_args_loop(t_token **token, char **args_array, int count);
+char	**copy_word_tokens(t_token **token, int count);
+int	count_word_tokens1(t_token *head);
+
+
 
 
 #endif
