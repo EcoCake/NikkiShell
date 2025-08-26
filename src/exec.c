@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/24 20:54:09 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 16:50:22 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,13 +157,13 @@ void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds, int parent)
 				dup2(pl->pipes[i][1], 1);
 		}
 		else if (finger->type == REDIR_IN)
-			redir_in_check(cmds);
+			redir_in_check(cmds, finger);
 		else if (i > 0 && pl->num_cmds > 1)
 			dup2(pl->pipes[i - 1][0], 0);
 		if (finger->type == REDIR_OUT)
-			redir_out_check(cmds);
+			redir_out_check(cmds, finger);
 		else if (finger->type == REDIR_APPEND)
-			redir_append_check(cmds);
+			redir_append_check(cmds, finger);
 		else if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			dup2(pl->pipes[i][1], 1);
 		finger = finger->next;
@@ -179,13 +179,27 @@ int	absolute_path(char *cmd)
 	return (1);
 }
 
-char	*env_path(t_cmd *cmds)
+char	*get_env_path(t_env_var *env)
+{
+	t_env_var	*f;
+
+	f = env;
+	while (f)
+	{
+		if (ft_strncmp(f->fullstring, "PATH", 4) == 0)
+			return (f->fullstring);
+		f = f->next;
+	}
+	return (NULL);
+}
+
+char	*env_path(t_cmd *cmds, t_pipeline *pl)
 {
 	char	**split;
 	char	*final_path;
 	int		i;
 
-	split = ft_split(getenv("PATH"), ':');
+	split = ft_split(get_env_path(pl->env), ':');
 	if (!split)
 		return (NULL);
 	i = 0;
@@ -214,7 +228,7 @@ void	not_builtin(t_pipeline *pl, t_cmd *cmds)
 		execve(cmds->args[0], cmds->args, env_array);
 	else
 	{
-		path = env_path(cmds);
+		path = env_path(cmds, pl);
 		if (!path)
 			path = ft_strdup("");
 		execve(path, cmds->args, env_array);

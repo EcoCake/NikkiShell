@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 23:59:53 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/21 03:41:29 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 16:49:33 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,21 +60,21 @@ void	unset_env(char *str, t_pipeline *pl)
 		return ;
 	f = pl->env;
 	temp = f;
-		while (f && f->next
-			&& ft_strncmp(str, f->fullstring, ft_strlen(str)) != 0)
+	while (f && f->next
+		&& ft_strncmp(str, f->fullstring, ft_strlen(str)) != 0)
+	{
+		if (f && f->next
+			&& ft_strncmp(str, f->next->fullstring, ft_strlen(str)) == 0
+			&& f->next->fullstring[ft_strlen(str)] == '=')
 		{
-			if (f && f->next
-				&& ft_strncmp(str, f->next->fullstring, ft_strlen(str)) == 0
-				&& f->next->fullstring[ft_strlen(str)] == '=')
-			{
-				temp = f->next;
-				f->next = temp->next;
-				free(temp->fullstring);
-				free(temp);
-				return ;
-			}
-		f = f->next;
+			temp = f->next;
+			f->next = temp->next;
+			free(temp->fullstring);
+			free(temp);
+			return ;
 		}
+		f = f->next;
+	}
 	unset_last(str, pl);
 	return ;
 }
