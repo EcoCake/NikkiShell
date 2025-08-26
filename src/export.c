@@ -143,7 +143,7 @@ void add_env_var(char *var, t_pipeline *pl)
         return ;
     curr = pl->env;
 	while (curr->next)
-    curr = curr->next;
+   		curr = curr->next;
     curr->next = new;
 }
 
