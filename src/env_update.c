@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 23:04:59 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/23 18:35:34 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 19:03:50 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,12 @@ void	old_pwd(t_pipeline *pl)
 	}
 }
 
+void	strjoin_fail_msg(t_env_var	*finger)
+{
+	perror("ft_strjoin failed in cd_update");
+	finger->fullstring = ft_strdup("PWD=");
+}
+
 void	cd_update(t_pipeline *pl)
 {
 	t_env_var	*finger;
@@ -58,10 +64,7 @@ void	cd_update(t_pipeline *pl)
 			finger->fullstring = NULL;
 			finger->fullstring = ft_strjoin("PWD=", cwd);
 			if (!finger->fullstring)
-			{
-				perror("ft_strjoin failed in cd_update");
-				finger->fullstring = ft_strdup("PWD=");
-			}
+				strjoin_fail_msg(finger);
 			return ;
 		}
 		finger = finger->next;
