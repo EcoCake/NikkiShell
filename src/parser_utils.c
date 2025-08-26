@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 09:38:23 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/25 01:50:32 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 20:10:46 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,6 @@ int	add_redir_to_cmd(t_cmd *cmd, t_redirection *new_redir)
 		}
 		return 0;
 }
-
-int count_word_tokens(t_token *head)
-{
-	int count;
-	count = 0;
-	while (head && head->type == WORD)
-	{
-		count++;
-		head = head->next;
-	}
-	return (count);
-}
-
-//converting WORD tokens into nulltermed char** array
-//processes only the consecutive word tokens from current_token and will go to next after its processed
 
 char	**tokens_to_args_array(t_token **current_token)
 {

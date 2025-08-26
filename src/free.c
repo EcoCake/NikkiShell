@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 13:13:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/25 01:50:20 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/25 18:00:41 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	free_token_list(t_token *head)
 void	free_env_list(t_env_var *head)
 {
 	t_env_var	*temp;
+
 	while (head)
 	{
 		temp = head->next;
@@ -39,7 +40,8 @@ void	free_env_list(t_env_var *head)
 
 void	free_env_array(char **env_array)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	if (env_array[i])
 	{
@@ -52,43 +54,29 @@ void	free_env_array(char **env_array)
 	}
 }
 
-void free_str_array(char **array)
+void	free_str_array(char **array)
 {
-	int i;
+	int	i;
+
 	i = 0;
-	
 	if (!array)
-		return;
+		return ;
 	while (array[i])
 	{
 		free(array[i]);
 		i++;
 	}
-	free(array);
+	free (array);
 }
 
-void free_redir_list(t_redirection *head)
+void	free_redir_list(t_redirection *head)
 {
-	t_redirection *temp;
+	t_redirection	*temp;
+
 	while (head)
 	{
 		temp = head->next;
 		free(head->file);
-		free(head);
-		head = temp;
-	}
-}
-
-void free_cmd_list(t_cmd *head)
-{
-	t_cmd *temp;
-	while (head)
-	{
-		temp = head->next;
-		if (head->args)
-			free_str_array(head->args); //free the char** args array
-		if (head->redirection)
-			free_redir_list(head->redirection);
 		free(head);
 		head = temp;
 	}

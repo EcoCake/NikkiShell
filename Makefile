@@ -13,12 +13,14 @@ READLINE_FLAGS  = -lreadline
 
 # --- Source Files ---
 SRCS_NAMES      = \
-    tester.c \
-    free.c \
-    signals.c \
-    tokenize_utils.c \
-    tokenize.c \
-    env_utils.c \
+	tester.c \
+	free.c \
+	free1.c \
+	signals.c \
+	tokenize_utils.c \
+	tokenize_utils1.c \
+	tokenize.c \
+	env_utils.c \
 	parser_utils.c \
 	parser.c \
 	exec.c	\
@@ -41,6 +43,10 @@ SRCS_NAMES      = \
 	parent.c	\
 	env_update.c \
 	expansion.c	\
+	parent.c	\
+	env_update.c \
+	basic.c \
+	basic1.c \
 
 MINISHELL_SRCS  = $(addprefix src/, $(SRCS_NAMES))
 

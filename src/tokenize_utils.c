@@ -6,72 +6,14 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:45:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/24 14:17:06 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/26 20:06:29 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_space(int c)
-{
-	if (c == ' ' || c == '\n' || c == '\t'
-		|| c == '\v' || c == '\f' || c == '\r')
-		return (1);
-	return (0);
-}
 
-int	skip_space(const char *line, int i)
-{
-	while (line[i] && is_space(line[i]))
-		i++;
-	return (i);
-}
-
-int	is_quote(char c)
-{
-	if (c == '\'' || c == '"')
-		return (1);
-	return (0);
-}
-
-int	is_operator(char c)
-{
-	if (c == '|' || c == '<' || c == '>')
-		return (1);
-	return (0);
-}
-int	is_word_char(char c)
-{
-    return !(is_space(c) || is_operator(c) || is_quote(c) || c == '\0');
-}
-
-int is_word(const char *s)
-{
-	if (s && *s && !is_space(*s) && !is_quote(*s)
-		&& *s != '$' && !is_operator(*s))
-		return (1);
-	return (0);
-}
-
-//this shit needs to be freed afterwards GOTTA REMEMBER I HATE THIS SHIT
-char *extract_word(const char *line, int *position)
-{
-	int start;
-	int len;
-	len = 0;
-	start = *position;
-
-	while (line[*position] && is_word_char(line[*position]))
-	{
-		len++;
-		(*position)++;
-	}
-	if (len == 0)
-		return NULL;
-	return (ft_substr(line, start, len));
-}
-//also hafta manually free this shit GOTTA REMEMBER
-char *extract_quoted_str(const char *line, int *position, char quote)
+char	*extract_quoted_str(const char *line, int *position, char quote)
 {
 	int		start;
 	int		len;
@@ -97,11 +39,11 @@ char *extract_quoted_str(const char *line, int *position, char quote)
 
 char *extract_file_delimiter(const char *line, int *position)
 {
-	char *extracted_value;
-	char quote;
+	char	*extracted_value;
+	char	quote;
+
 	extracted_value = NULL;
 	*position = skip_space(line, *position);
-	
 	if (!line[*position])
 	{
 		printf("Error, No filename after redirection\n");

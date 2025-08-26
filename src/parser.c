@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:04:18 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/25 01:50:35 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 17:54:02 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,6 @@ t_cmd *create_cmd_node()
 	new->next = NULL;
 	return (new);
 }
-
-
-//i will have to split this up i know
-//i need to start examprepping so forgive me for 
-//spaghetti code
 
 t_cmd *parse_tokens(t_token *tokens)
 {
