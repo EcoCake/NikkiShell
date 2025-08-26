@@ -24,7 +24,12 @@ SRCS_NAMES      = \
 	parser_utils.c \
 	parser.c \
 	exec.c	\
+	exec_utils.c \
+	exec_path.c	\
+	exec_pipes.c	\
+	exec_builtins.c	\
 	redirs.c	\
+	heredoc.c	\
 	cd.c		\
 	cd_utils.c	\
 	echo.c		\
@@ -37,8 +42,6 @@ SRCS_NAMES      = \
 	exit.c		\
 	parent.c	\
 	env_update.c \
-	get_line.c	\
-	gl_utils.c	\
 	expansion.c	\
 	parent.c	\
 	env_update.c \
