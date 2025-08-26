@@ -6,11 +6,24 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/24 18:44:38 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/26 20:17:01 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_line_whitespace(const char *line)
+{
+	if (!line)
+		return (1);
+	while (*line)
+	{
+		if (!is_space((unsigned char)*line))
+			return (0);
+		line++;
+	}
+	return (1);
+}
 
 int main(int ac, char **av, char **envp)
 {
@@ -46,6 +59,11 @@ int main(int ac, char **av, char **envp)
             printf("exit\n");
             break;
         }
+		if (is_line_whitespace(line))
+		{
+			free(line);
+			continue;
+		}
         if (g_last_signal == SIGINT)
 		{
             free(line);

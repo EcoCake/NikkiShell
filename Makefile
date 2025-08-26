@@ -19,12 +19,9 @@ SRCS_NAMES      = \
 	signals.c \
 	tokenize_utils.c \
 	tokenize_utils1.c \
-	tokenize_utils2.c \
 	tokenize.c \
 	env_utils.c \
 	parser_utils.c \
-	parser_utils1.c \
-	parser_utils2.c \
 	parser.c \
 	exec.c	\
 	redirs.c	\
@@ -40,6 +37,8 @@ SRCS_NAMES      = \
 	expansion.c	\
 	parent.c	\
 	env_update.c \
+	basic.c \
+	basic1.c \
 
 MINISHELL_SRCS  = $(addprefix src/, $(SRCS_NAMES))
 
