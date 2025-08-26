@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/26 19:04:09 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 19:08:25 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,18 +118,6 @@ void	free_env_array(char **env_array);
 void	free_str_array(char **array);
 void	free_redir_list(t_redirection *head);
 void	free_cmd_list(t_cmd *head);
-
-// get_next_line_utils.c
-
-int		ft_strchrnum(char *s, char c);
-char	*ft_cpystr(char *s1);
-
-// get_next_line.c
-
-char	*ft_fill_ex(char *excess);
-char	*ft_replace(char *excess, char *all);
-char	*ft_readline(int fd, char *excess);
-char	*get_next_line(int fd);
 
 // parser_utils.c
 
