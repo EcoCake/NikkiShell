@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/24 17:14:46 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 16:50:42 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list);
 void	init_pipes(t_pipeline *pl, int num_cmds);
 void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds, int parent);
 int		absolute_path(char *cmd);
-char	*env_path(t_cmd *cmds);
+char	*env_path(t_cmd *cmds, t_pipeline *pl);
 void	not_builtin(t_pipeline *pl, t_cmd *cmds);
 int		get_argc(t_cmd *cmds);
 int		builtin_check(t_pipeline *pl, t_cmd *cmds);
@@ -132,9 +132,9 @@ t_cmd	*parse_tokens(t_token *tokens);
 
 int		read_until_limiter(int fd, char *limiter);
 void	heredoc_check(t_cmd *cmds, t_pipeline *pl);
-void	redir_in_check(t_cmd *cmds);
-void	redir_out_check(t_cmd *cmds);
-void	redir_append_check(t_cmd *cmds);
+void	redir_in_check(t_cmd *cmds, t_redirection *f);
+void	redir_out_check(t_cmd *cmds, t_redirection *f);
+void	redir_append_check(t_cmd *cmds, t_redirection *f);
 
 //signals.c
 
@@ -159,7 +159,6 @@ char	*extract_file_delimiter(const char *line, int *position);
 t_token_types	t_type(const char *str);
 void			add_token(t_token **head, t_token **current, char *value, t_token_types type);
 t_token			*tokenize(char *line);
-
 
 //expansion.c
 

@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 03:23:52 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/24 16:39:51 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 16:50:09 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_exit(int argc, char **argv, t_pipeline *pl, t_cmd *cmds)
 {
 	printf("exit\n");
 	if (argc == 1)
-		pl->extcode = 0;
+		exit(pl->extcode);
 	else if (argc == 2 && argv[1][0] == '\0')
 	{
 		pl->extcode = 2;

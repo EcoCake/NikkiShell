@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:02:59 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/24 20:49:30 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 16:49:52 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int	read_until_limiter(int fd, char *limiter)
 	}
 	return (g_last_signal);
 }
-
-// NEED TO DO HEREDOC BEFORE THE FUNCTION ELSE HEREDOC TOO SLOW TO TRANSFER TO PIPE
 
 void	heredoc_check(t_cmd *cmds, t_pipeline *pl)
 {
@@ -69,14 +67,15 @@ void	heredoc_check(t_cmd *cmds, t_pipeline *pl)
 	signal(SIGINT, handle_sigint_rl); //goes back to alicia's way so act the same way as before heredoc
 }
 
-void	redir_in_check(t_cmd *cmds)
+void	redir_in_check(t_cmd *cmds, t_redirection *f)
 {
 	int	fd;
 
-	fd = open(cmds->redirection->file, O_RDONLY);
+	fd = open(f->file, O_RDONLY);
 	if (fd == -1)
 	{
-		perror(cmds->redirection->file);
+		perror(f->file);
+		ft_putstr_fd("gasdgf\n\n", 2);
 		exit_free(cmds);
 		exit(1);
 	}
@@ -84,14 +83,14 @@ void	redir_in_check(t_cmd *cmds)
 	close(fd);
 }
 
-void	redir_out_check(t_cmd *cmds)
+void	redir_out_check(t_cmd *cmds, t_redirection *f)
 {
 	int	fd;
 
-	fd = open(cmds->redirection->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	fd = open(f->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
 	{
-		perror(cmds->redirection->file);
+		perror(f->file);
 		exit_free(cmds);
 		exit(1);
 	}
@@ -99,14 +98,14 @@ void	redir_out_check(t_cmd *cmds)
 	close(fd);
 }
 
-void	redir_append_check(t_cmd *cmds)
+void	redir_append_check(t_cmd *cmds, t_redirection *f)
 {
 	int	fd;
 
-	fd = open(cmds->redirection->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	fd = open(f->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (fd == -1)
 	{
-		perror(cmds->redirection->file);
+		perror(f->file);
 		exit_free(cmds);
 		exit(1);
 	}
