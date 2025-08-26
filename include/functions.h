@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/26 19:08:25 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 22:00:48 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		ft_cd(int argc, char **argv, t_pipeline *pl);
 
 //	cd_utils.c
 int		ft_cd_error(char *path, char *to_free);
-char	*fill_path(char *str)
+char	*fill_path(char *str);
 int		error_msg_cd(void);
 char	*ft_strjoinslash(char *s1, char *s2);
 
@@ -67,9 +67,10 @@ int		name_checker(char *var);
 void	dup_check(char *var, t_pipeline *pl);
 
 //	exit.c
-void	exit_free(t_pipeline *pl, t_cmd *cmds);
+void	linesave_exit_free(t_pipeline *pl, t_cmd *cmds);
 int		numchecker(char *str);
-void	exit_line_saver(t_pipeline *pl);
+void	line_saver1(t_pipeline *pl);
+void	line_saver2(char** argv, t_pipeline *pl);
 int		ft_exit(int argc, char **argv, t_pipeline *pl, t_cmd *cmds);
 
 // env_utils.c
@@ -80,35 +81,44 @@ char		*get_env_value(t_env_var *env_list, const char *key);
 char		**env_list_array(t_env_var *env_list);
 
 //	parent.c
-int	adoption_center(t_cmd *cmds);
+int		adoption_center(t_cmd *cmds);
+void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i);
+void	restore_fds(int save_fd_in, int save_fd_out, char *cmds);
+int		children_counter(t_cmd *cmds);
+void	child_exec(t_pipeline *pl, t_cmd *cur_cmd, int i);
 
 //	env_update.c
 void	old_pwd(t_pipeline *pl);
-void	strjoin_fail_msg(t_env_var	*finger)
+void	strjoin_fail_msg(t_env_var	*finger);
 void	cd_update(t_pipeline *pl);
 int		cd_tracker(int argc, char **argv, t_pipeline *pl);
 
 // exec.c
+void	redir_loop(t_cmd *cmds, t_pipeline *pl, int i);
+void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds, int parent);
+void	exec(t_pipeline *pl, t_cmd *cmds, int i);
+void	command_loop(t_pipeline *pl, t_cmd *cmds);
+int		exec_main(t_cmd *cmds, t_env_var *env_list);
+
+// exec_utils.c
+int		get_argc(t_cmd *cmds);
 int		ft_strcmp(char *s1, char *s2);
 void	free_tab_exec(char **tab);
 void	exit_free(t_cmd *cmds);
-char	**create_args(char *args1, char *args2);
-void	fill_cmds(t_cmd **cmds);
 int		cmds_count(t_cmd *cmds);
+
+//	exec_path.c
+int		absolute_path(char *cmd);
+char	*env_path(t_cmd *cmds, t_pipeline *pl);
+
+//	exec_pipes.c
 void	close_pipes(t_pipeline *pl);
 void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list);
 void	init_pipes(t_pipeline *pl, int num_cmds);
-void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds, int parent);
-int		absolute_path(char *cmd);
-char	*env_path(t_cmd *cmds, t_pipeline *pl);
+
+//	exec_builtins.c
 void	not_builtin(t_pipeline *pl, t_cmd *cmds);
-int		get_argc(t_cmd *cmds);
 int		builtin_check(t_pipeline *pl, t_cmd *cmds);
-void	exec(t_pipeline *pl, t_cmd *cmds, int i);
-void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i);
-void	command_loop(t_pipeline *pl, t_cmd *cmds);
-//void	exec_main(t_cmd *cmds, char **env);
-int		exec_main(t_cmd *cmds, t_env_var *env_list);
 
 //free.c
 
@@ -131,10 +141,12 @@ char			**tokens_to_args_array(t_token **current_token);
 t_cmd	*create_cmd_node();
 t_cmd	*parse_tokens(t_token *tokens);
 
-//redirs.c
-
+//heredoc.c
 int		read_until_limiter(int fd, char *limiter);
+void	heredoc_exit(t_cmd *cmds, t_pipeline *pl, int fd);
 void	heredoc_check(t_cmd *cmds, t_pipeline *pl);
+
+//redirs.c
 void	redir_in_check(t_cmd *cmds, t_redirection *f);
 void	redir_out_check(t_cmd *cmds, t_redirection *f);
 void	redir_append_check(t_cmd *cmds, t_redirection *f);
