@@ -26,12 +26,17 @@ SRCS_NAMES      = \
 	exec.c	\
 	redirs.c	\
 	cd.c		\
+	cd_utils.c	\
 	echo.c		\
 	pwd.c		\
 	env.c		\
 	unset.c		\
 	export.c	\
+	export_utils.c	\
+	export_utils2.c	\
 	exit.c		\
+	parent.c	\
+	env_update.c \
 	get_line.c	\
 	gl_utils.c	\
 	expansion.c	\
