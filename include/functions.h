@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/26 16:50:42 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/26 19:04:09 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,41 +17,60 @@
 #include "minishell.h"
 
 //  cd.c
-int		error_msg_cd();
-void	linesavercd(t_pipeline *pl, char *path);
-int		ft_cd_error(char *path, char *to_free);
-char	*ft_strjoinslash(char *s1, char *s2);
 int		ft_path_extra(char *str, t_pipeline *pl);
 int		ft_paths(char *str);
+void	linesavercd(t_pipeline *pl, char *path);
 int		ft_cd(int argc, char **argv, t_pipeline *pl);
 
-// echo.c
+//	cd_utils.c
+int		ft_cd_error(char *path, char *to_free);
+char	*fill_path(char *str)
+int		error_msg_cd(void);
+char	*ft_strjoinslash(char *s1, char *s2);
 
+// echo.c
 int		flag_checker(char *flag);
 void	n_skipper(char **argv, int *j);
 void	ft_write_lines(char **argv, int *i, int *j);
 int		ft_echo(int argc, char **argv);
 
 // pwd.c
-int 	ft_pwd(int argc, char **argv, t_cmd *cmds);
 void	pwd_errormsg(char **argv);
+int 	ft_pwd(int argc, char **argv, t_cmd *cmds);
 
 // env.c
 int	ft_env(int argc, char **argv, t_pipeline *pl);
 
-//unset.c
+//	unset.c
 int		unset_head(char *str, t_pipeline *pl);
 void	unset_last(char *str, t_pipeline *pl);
 void	unset_env(char *str, t_pipeline *pl);
 int		ft_unset(int argc, char **argv, t_pipeline *pl);
 
-//export.c
-int 	ft_export(int argc, char **argv, t_pipeline *pl);
+//	export.c
 void 	exp_alone(t_pipeline *pl);
 void 	expsorter(char **exvar);
 void	expfiller(int argc, char **argv, char **exvar, t_pipeline *pl);
 int 	expcounter(int argc, t_pipeline *pl);
+int 	ft_export(int argc, char **argv, t_pipeline *pl);
+
+//	export_utils.c
 int 	ft_strchre(char *str, char c);
+char	*ft_strdupexp(const char *s);
+void	ft_free(char **array);
+int		ft_strchrn(char *str, char c);
+void	add_env_var(char *var, t_pipeline *pl);
+
+//	export_utils2.c
+void	expprinter(char **exvar);
+int		name_checker(char *var);
+void	dup_check(char *var, t_pipeline *pl);
+
+//	exit.c
+void	exit_free(t_pipeline *pl, t_cmd *cmds);
+int		numchecker(char *str);
+void	exit_line_saver(t_pipeline *pl);
+int		ft_exit(int argc, char **argv, t_pipeline *pl, t_cmd *cmds);
 
 // env_utils.c
 
@@ -60,20 +79,16 @@ t_env_var	*init_env_list(char **envp);
 char		*get_env_value(t_env_var *env_list, const char *key);
 char		**env_list_array(t_env_var *env_list);
 
-//parent.c
+//	parent.c
 int	adoption_center(t_cmd *cmds);
 
-//env_update.c
+//	env_update.c
+void	old_pwd(t_pipeline *pl);
+void	strjoin_fail_msg(t_env_var	*finger)
+void	cd_update(t_pipeline *pl);
 int		cd_tracker(int argc, char **argv, t_pipeline *pl);
-void	cd_visualizer(t_pipeline *pl);
-
-
-//exit.c
-int	ft_exit(int argc, char **argv, t_pipeline *pl, t_cmd *cmds);
-int	numchecker(char *str);
 
 // exec.c
-
 int		ft_strcmp(char *s1, char *s2);
 void	free_tab_exec(char **tab);
 void	exit_free(t_cmd *cmds);
