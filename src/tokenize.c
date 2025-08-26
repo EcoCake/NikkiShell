@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:24:00 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/23 21:34:52 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/26 21:36:01 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,112 +57,85 @@ void add_token(t_token **head, t_token **current, char *value, t_token_types typ
     }
 }
 
-//im sorry this is ugly, i will refactor it later.
+char* extract_full_argument(const char* line, int* position)
+{
+    int start = *position;
+    int in_squote = 0;
+    int in_dquote = 0;
+
+    while (line[*position])
+    {
+        char current_char = line[*position];
+
+        if (current_char == '\'' && !in_dquote)
+            in_squote = !in_squote;
+        else if (current_char == '"' && !in_squote)
+            in_dquote = !in_dquote;
+        if ((is_space(current_char) || is_operator(current_char)) && !in_squote && !in_dquote)
+            break;
+        (*position)++;
+    }
+    if (in_squote || in_dquote)
+    {
+        fprintf(stderr, "syntax error: unclosed quote\n");
+        return NULL;
+    }
+    return ft_substr(line, start, *position - start);
+}
+
 
 t_token *tokenize(char *line)
 {
-	t_token *head = NULL;
-	t_token *current = NULL;
-	char quote_char;
-	int i;
-	char *extracted_value;
-	
-	i = 0;
+	t_token	*head;
+	t_token	*current;
+	int		i;
+	char	*extracted_value;
 
+	head = NULL;
+	current = NULL;
+	i = 0;
 	if (!line)
-		return(NULL);
+		return (NULL);
 	while (line[i])
 	{
 		i = skip_space(line, i);
 		if (!line[i])
-			break;
-
-		if (line[i] == '<' && line[i+1] == '<')
+			break ;
+		if (line[i] == '<' && line[i + 1] == '<')
 		{
 			add_token(&head, &current, ft_strdup("<<"), HERE_DOC);
 			i += 2;
-			i = skip_space(line, i);
-			extracted_value = extract_word(line, &i);
-			if (!extracted_value)
-			{
-				fprintf(stderr, "syntax error near unexpected token 'newline' after '<<'\n");
-				free_token_list(head);
-				return NULL;
-			}
-			add_token(&head, &current, extracted_value, WORD);
 		}
-		else if (line[i] == '>' && line[i+1] == '>')
+		else if (line[i] == '>' && line[i + 1] == '>')
 		{
 			add_token(&head, &current, ft_strdup(">>"), REDIR_APPEND);
 			i += 2;
-			i = skip_space(line, i);
-			extracted_value = extract_word(line, &i);
-			if (!extracted_value)
-			{
-				fprintf(stderr, "syntax error near unexpected token 'newline' after '>>'\n");
-				free_token_list(head);
-				return NULL;
-			}
-			add_token(&head, &current, extracted_value, WORD);
 		}
 		else if (line[i] == '<')
 		{
 			add_token(&head, &current, ft_strdup("<"), REDIR_IN);
 			i += 1;
-			i = skip_space(line, i);
-			extracted_value = extract_word(line, &i);
-			if (!extracted_value)
-			{
-				fprintf(stderr, "syntax error near unexpected token 'newline' after '<'\n");
-				free_token_list(head);
-				return NULL;
-			}
-			add_token(&head, &current, extracted_value, WORD);
 		}
 		else if (line[i] == '>')
 		{
 			add_token(&head, &current, ft_strdup(">"), REDIR_OUT);
 			i += 1;
-			i = skip_space(line, i);
-			extracted_value = extract_word(line, &i);
-			if (!extracted_value)
-			{
-				fprintf(stderr, "syntax error near unexpected token 'newline' after '>'\n");
-				free_token_list(head);
-				return NULL;
-			}
-			add_token(&head, &current, extracted_value, WORD);
-        }
+		}
 		else if (line[i] == '|')
 		{
 			add_token(&head, &current, ft_strdup("|"), PIPE);
-			i += 1; 
-		}
-		else if (is_quote(line[i]))
-		{
-			quote_char = line[i];
-			i++;
-			extracted_value = extract_quoted_str(line, &i, quote_char); 
-			if (!extracted_value)
-			{
-				fprintf(stderr, "syntax error: unclosed quote\n");
-				free_token_list(head);
-				return NULL;
-			}
-			add_token(&head, &current, extracted_value, WORD);
+			i += 1;
 		}
 		else
 		{
-			extracted_value = extract_word(line, &i);
+			extracted_value = extract_full_argument(line, &i);
 			if (!extracted_value)
 			{
-				fprintf(stderr, "malloc failure for word.\n");
 				free_token_list(head);
-				return NULL;
+				return (NULL);
 			}
 			add_token(&head, &current, extracted_value, WORD);
 		}
 	}
 	return (head);
 }
-

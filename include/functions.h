@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
 /*   Updated: 2025/08/26 19:04:09 by sionow           ###   ########.fr       */
@@ -131,18 +131,6 @@ char	*ft_replace(char *excess, char *all);
 char	*ft_readline(int fd, char *excess);
 char	*get_next_line(int fd);
 
-// parser_utils.c
-
-t_redirection	*create_redir_node(t_token_types type, char *file);
-int				add_redir_to_cmd(t_cmd *cmd, t_redirection *new_redir);
-int				count_word_tokens(t_token *head);
-char			**tokens_to_args_array(t_token **current_token);
-
-// parser.c
-
-t_cmd	*create_cmd_node();
-t_cmd	*parse_tokens(t_token *tokens);
-
 //redirs.c
 
 int		read_until_limiter(int fd, char *limiter);
@@ -150,6 +138,32 @@ void	heredoc_check(t_cmd *cmds, t_pipeline *pl);
 void	redir_in_check(t_cmd *cmds, t_redirection *f);
 void	redir_out_check(t_cmd *cmds, t_redirection *f);
 void	redir_append_check(t_cmd *cmds, t_redirection *f);
+
+// parser.c
+
+t_cmd	*create_cmd_node();
+t_cmd	*parse_tokens(t_token *tokens);
+
+// parser_utils.c
+
+t_redirection	*create_redir_node(t_token_types type, char *file);
+int				add_redir_to_cmd(t_cmd *cmd, t_redirection *new_redir);
+int				count_word_tokens(t_token *head);
+char			**tokens_to_args_array(t_token **current_token);
+
+
+//signals.c
+
+extern volatile sig_atomic_t g_last_signal;
+void	handle_sigint_rl(int signal);
+void	signalhandler(int sig);
+
+// env utils
+
+t_env_var	*create_env_node(char *env_str);
+t_env_var *init_env_list(char **envp);
+char	*get_env_value(t_env_var *env_list, const char *key);
+char **env_list_array(t_env_var *env_list);
 
 //signals.c
 
@@ -174,6 +188,8 @@ char	*extract_file_delimiter(const char *line, int *position);
 t_token_types	t_type(const char *str);
 void			add_token(t_token **head, t_token **current, char *value, t_token_types type);
 t_token			*tokenize(char *line);
+char* extract_full_argument(const char* line, int* position);
+
 
 //expansion.c
 
@@ -181,17 +197,12 @@ int		is_var_char(char c);
 int 	get_var_name_len(const char *s);
 char	*str_append(char *dest, const char *src);
 char	*expand_variable(const char *str_after_dollar, t_env_var *env_list, int last_exit_status);
-
-//does the ~expansion (~, ~/path), returns the allocated str with the expanded path
 char *tilde_expansion(const char *str, t_env_var *env_list);
-
-//this processes  the str (token value or redir filename), it goes thru the str, handles the quotes and does the expansion and then builds a new str without the quotes
 char	*expand_and_unquote(char *str, t_env_var *env_list, int last_exit_status);
-
-// goes thru the t_cmd->args and puts the expansions and unquotation on each arg. it replaces the og expanded str and frees the old
 void	expand_cmd_args(t_cmd *cmd, t_env_var *env_list, int last_exit_status);
-
-//goes thru the t_cmd->redirection list and puts the expansion and unquote to the file part of each redir node
 void	expand_redirs(t_cmd *cmd, t_env_var *env_list, int last_exit_status);
+
+
+//basic funcs.c
 
 #endif

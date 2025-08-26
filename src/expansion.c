@@ -6,27 +6,12 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 21:54:34 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/24 14:19:21 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/26 21:34:31 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_var_char(char c)
-{
-	return (ft_isalnum(c) || c == '_');
-}
-int get_var_name_len(const char *s)
-{
-	int i;
-	i = 0;
-
-	if (s[i] == '?' || s[i] == '$')
-		return 1;
-	while (s[i] && is_var_char(s[i]))
-		i++;
-	return i;
-}
 char	*str_append(char *dest, const char *src)
 {
 	char *new_str;
@@ -53,6 +38,7 @@ char	*str_append(char *dest, const char *src)
 	new_str[dest_len + src_len] = '\0';
 	return new_str;
 }
+
 char	*expand_variable(const char *str_after_dollar, t_env_var *env_list, int last_exit_status)
 {
 	int		var_name_len;
@@ -60,40 +46,38 @@ char	*expand_variable(const char *str_after_dollar, t_env_var *env_list, int las
 	char	*value;
 
 	if (!str_after_dollar || *str_after_dollar == '\0')
-		return(ft_strdup("$"));
-	if (*str_after_dollar == '?') //for $? last exit status
-		return(ft_itoa(last_exit_status));
-	else if (*str_after_dollar == '$') // for $$ processid
+		return (ft_strdup("$"));
+	if (*str_after_dollar == '?')
+		return (ft_itoa(last_exit_status));
+	else if (*str_after_dollar == '$')
 		return (ft_itoa(getpid()));
-
 	var_name_len = get_var_name_len(str_after_dollar);
 	if (var_name_len == 0)
-		return(ft_strdup("$"));
+		return (ft_strdup("$"));
 	var_name = ft_substr(str_after_dollar, 0, var_name_len);
 	if (!var_name)
-		return NULL;
-// i am going to go crazy very soon..
+		return (NULL);
 	value = get_env_value(env_list, var_name);
 	free(var_name);
 	if (value)
 		return (ft_strdup(value));
 	else
-		return(ft_strdup(""));
+		return (ft_strdup(""));
 	
 }
-char *tilde_expansion(const char *str, t_env_var *env_list)
+char	*tilde_expansion(const char *str, t_env_var *env_list)
 {
-	char *home_dir;
+	char	*home_dir;
+
 	if (!str || *str != '~')
-		return (ft_strdup(str)); // no ~ to expand
+		return (ft_strdup(str));
 	if (str[1] == '\0')
 	{
 		home_dir = get_env_value(env_list, "HOME");
 		if (home_dir)
 			return(ft_strdup(home_dir));
-		return (ft_strdup("~")); // if no home set just ~
+		return (ft_strdup("~"));
 	}
-//this is terrible but hear me out
 	else if (str[1] == '/')
 	{
 		home_dir = get_env_value(env_list, "HOME");
@@ -101,8 +85,9 @@ char *tilde_expansion(const char *str, t_env_var *env_list)
 			return (ft_strjoinslash(home_dir, (char *)(str + 2)));
 		return (ft_strdup(str));
 	}
-	return  (ft_strdup(str)); // returm original string for unhandled ~
+	return (ft_strdup(str));
 }
+
 char    *expand_and_unquote(char *str, t_env_var *env_list, int last_exit_status)
 {
 	char	*final_str;
@@ -171,7 +156,7 @@ void	expand_cmd_args(t_cmd *cmd, t_env_var *env_list, int last_exit_status)
 			free(cmd->args[i]);
 			cmd->args[i] = new_arg_value;
 		}
-		else //here i dont know if we need to free already expanded args and the command lists so i just return, we will have to see if its gonna be incomplete expansion or no
+		else
 		{
 			perror("expansion: malloc failed");
 			return;
@@ -187,12 +172,12 @@ void	expand_redirs(t_cmd *cmd, t_env_var *env_list, int last_exit_status)
 	if (!cmd || !cmd->redirection)
 		return;
 	current_redir = cmd->redirection;
-	while (current_redir)//HEREDOC DELIMITERS ARE NOT TO BE EXPANDED
+	while (current_redir)
 	{
 		if (current_redir->type == HERE_DOC)
 		{
 			current_redir = current_redir->next;
-			continue; //skip expansion for heredoc delimiter
+			continue;
 		}
 		new_file_value = expand_and_unquote(current_redir->file, env_list, last_exit_status);
 		if (new_file_value)

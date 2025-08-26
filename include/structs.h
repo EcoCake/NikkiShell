@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:29:52 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/24 20:33:18 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/25 12:26:14 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,15 @@ typedef struct s_pipeline
 	int			og_in;
 	int			og_out;
 }	t_pipeline;
+
+//for norminette i need extra struct
+
+typedef struct s_tokenize_context
+{
+	t_token	**head;
+	t_token	**current;
+	char	*line;
+	int		*i;
+} t_tokenize_context;
 
 #endif
