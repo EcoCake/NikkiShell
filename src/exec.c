@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/27 00:29:50 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/27 15:32:18 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ void	redir_loop(t_cmd *cmds, t_pipeline *pl, int i)
 				dup2(pl->pipes[i][1], 1);
 		}
 		else if (finger->type == REDIR_IN)
-			redir_in_check(cmds, finger);
+			redir_in_check(pl, finger);
 		else if (i > 0 && pl->num_cmds > 1)
 			dup2(pl->pipes[i - 1][0], 0);
 		if (finger->type == REDIR_OUT)
-			redir_out_check(cmds, finger);
+			redir_out_check(pl, finger);
 		else if (finger->type == REDIR_APPEND)
-			redir_append_check(cmds, finger);
+			redir_append_check(pl, finger);
 		else if (i < pl->num_cmds - 1 && pl->num_cmds > 1)
 			dup2(pl->pipes[i][1], 1);
 		finger = finger->next;
@@ -116,6 +116,6 @@ int	exec_main(t_cmd *cmds, t_env_var *env_list)
 	}
 	close_pipes(&pl);
 	free(pl.pids);
-	restore_fds(pl.og_in, pl.og_out, NULL);
+	restore_fds(pl.og_in, pl.og_out, NULL, NULL);
 	return (pl.extcode);
 }

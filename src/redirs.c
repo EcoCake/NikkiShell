@@ -6,13 +6,13 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:02:59 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 21:11:01 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/27 15:31:40 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	redir_in_check(t_cmd *cmds, t_redirection *f)
+void	redir_in_check(t_pipeline *pl, t_redirection *f)
 {
 	int	fd;
 
@@ -20,15 +20,17 @@ void	redir_in_check(t_cmd *cmds, t_redirection *f)
 	if (fd == -1)
 	{
 		perror(f->file);
-		ft_putstr_fd("gasdgf\n\n", 2);
-		exit_free(cmds);
+		close_pipes(pl);
+		free(pl->pids);
+		free_cmd_list(pl->head);
+		free_env_list(pl->env);
 		exit(1);
 	}
 	dup2(fd, 0);
 	close(fd);
 }
 
-void	redir_out_check(t_cmd *cmds, t_redirection *f)
+void	redir_out_check(t_pipeline *pl, t_redirection *f)
 {
 	int	fd;
 
@@ -36,14 +38,17 @@ void	redir_out_check(t_cmd *cmds, t_redirection *f)
 	if (fd == -1)
 	{
 		perror(f->file);
-		exit_free(cmds);
+		close_pipes(pl);
+		free(pl->pids);
+		free_cmd_list(pl->head);
+		free_env_list(pl->env);
 		exit(1);
 	}
 	dup2(fd, 1);
 	close(fd);
 }
 
-void	redir_append_check(t_cmd *cmds, t_redirection *f)
+void	redir_append_check(t_pipeline *pl, t_redirection *f)
 {
 	int	fd;
 
@@ -51,7 +56,10 @@ void	redir_append_check(t_cmd *cmds, t_redirection *f)
 	if (fd == -1)
 	{
 		perror(f->file);
-		exit_free(cmds);
+		close_pipes(pl);
+		free(pl->pids);
+		free_cmd_list(pl->head);
+		free_env_list(pl->env);
 		exit(1);
 	}
 	dup2(fd, 1);

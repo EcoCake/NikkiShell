@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/26 22:00:48 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/27 16:22:58 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ void	ft_write_lines(char **argv, int *i, int *j);
 int		ft_echo(int argc, char **argv);
 
 // pwd.c
+void	pwd_free(t_pipeline *pl);
 void	pwd_errormsg(char **argv);
-int 	ft_pwd(int argc, char **argv, t_cmd *cmds);
+int 	ft_pwd(int argc, char **argv, t_pipeline *pl);
 
 // env.c
 int	ft_env(int argc, char **argv, t_pipeline *pl);
@@ -73,11 +74,17 @@ void	line_saver1(t_pipeline *pl);
 void	line_saver2(char** argv, t_pipeline *pl);
 int		ft_exit(int argc, char **argv, t_pipeline *pl, t_cmd *cmds);
 
+// env_utils.c
+
+t_env_var	*create_env_node(char *env_str);
+t_env_var	*init_env_list(char **envp);
+char		*get_env_value(t_env_var *env_list, const char *key);
+char		**env_list_array(t_env_var *env_list);
 
 //	parent.c
 int		adoption_center(t_cmd *cmds);
 void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i);
-void	restore_fds(int save_fd_in, int save_fd_out, char *cmds);
+void	restore_fds(int save_fd_in, int save_fd_out, char *cmds, t_cmd *cm);
 int		children_counter(t_cmd *cmds);
 void	child_exec(t_pipeline *pl, t_cmd *cur_cmd, int i);
 
@@ -111,6 +118,7 @@ void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list);
 void	init_pipes(t_pipeline *pl, int num_cmds);
 
 //	exec_builtins.c
+char	*join3(char *s1, char *s2, char *s3);
 void	not_builtin(t_pipeline *pl, t_cmd *cmds);
 int		builtin_check(t_pipeline *pl, t_cmd *cmds);
 
@@ -123,11 +131,6 @@ void	free_str_array(char **array);
 void	free_redir_list(t_redirection *head);
 void	free_cmd_list(t_cmd *head);
 
-// parser.c
-
-t_cmd	*create_cmd_node();
-t_cmd	*parse_tokens(t_token *tokens);
-
 // parser_utils.c
 
 t_redirection	*create_redir_node(t_token_types type, char *file);
@@ -135,6 +138,10 @@ int				add_redir_to_cmd(t_cmd *cmd, t_redirection *new_redir);
 int				count_word_tokens(t_token *head);
 char			**tokens_to_args_array(t_token **current_token);
 
+// parser.c
+
+t_cmd	*create_cmd_node();
+t_cmd	*parse_tokens(t_token *tokens);
 
 //heredoc.c
 int		read_until_limiter(int fd, char *limiter);
@@ -142,17 +149,9 @@ void	heredoc_exit(t_cmd *cmds, t_pipeline *pl, int fd);
 void	heredoc_check(t_cmd *cmds, t_pipeline *pl);
 
 //redirs.c
-void	redir_in_check(t_cmd *cmds, t_redirection *f);
-void	redir_out_check(t_cmd *cmds, t_redirection *f);
-void	redir_append_check(t_cmd *cmds, t_redirection *f);
-
-// env utils
-
-t_env_var	*create_env_node(char *env_str);
-t_env_var *init_env_list(char **envp);
-char	*get_env_value(t_env_var *env_list, const char *key);
-char **env_list_array(t_env_var *env_list);
-
+void	redir_in_check(t_pipeline *pl, t_redirection *f);
+void	redir_out_check(t_pipeline *pl, t_redirection *f);
+void	redir_append_check(t_pipeline *pl, t_redirection *f);
 
 //signals.c
 
@@ -177,8 +176,6 @@ char	*extract_file_delimiter(const char *line, int *position);
 t_token_types	t_type(const char *str);
 void			add_token(t_token **head, t_token **current, char *value, t_token_types type);
 t_token			*tokenize(char *line);
-char* extract_full_argument(const char* line, int* position);
-
 
 //expansion.c
 
@@ -186,12 +183,17 @@ int		is_var_char(char c);
 int 	get_var_name_len(const char *s);
 char	*str_append(char *dest, const char *src);
 char	*expand_variable(const char *str_after_dollar, t_env_var *env_list, int last_exit_status);
+
+//does the ~expansion (~, ~/path), returns the allocated str with the expanded path
 char *tilde_expansion(const char *str, t_env_var *env_list);
+
+//this processes  the str (token value or redir filename), it goes thru the str, handles the quotes and does the expansion and then builds a new str without the quotes
 char	*expand_and_unquote(char *str, t_env_var *env_list, int last_exit_status);
+
+// goes thru the t_cmd->args and puts the expansions and unquotation on each arg. it replaces the og expanded str and frees the old
 void	expand_cmd_args(t_cmd *cmd, t_env_var *env_list, int last_exit_status);
+
+//goes thru the t_cmd->redirection list and puts the expansion and unquote to the file part of each redir node
 void	expand_redirs(t_cmd *cmd, t_env_var *env_list, int last_exit_status);
-
-
-//basic funcs.c
 
 #endif

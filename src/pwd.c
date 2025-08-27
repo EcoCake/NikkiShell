@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:40:55 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/27 00:01:27 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/27 16:21:25 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 
 //original error msg shows this second line: pwd: usage: pwd [-LP]
 //but we dont have any flags pwd supports so no 2nd line
+
+void	pwd_free(t_pipeline *pl)
+{
+	free(pl->pids);
+	close_pipes(pl);
+	free_cmd_list(pl->head);
+	free_env_list(pl->env);
+}
+
 void	pwd_errormsg(char **argv)
 {
 	write(2, "pwd: ", 4);
@@ -23,14 +32,14 @@ void	pwd_errormsg(char **argv)
 	write(2, "invalid option\n", 15);
 }
 
-int	ft_pwd(int argc, char **argv, t_cmd *cmds)
+int	ft_pwd(int argc, char **argv, t_pipeline *pl)
 {
 	char	cwd[PATH_MAX];
 
 	if (argc > 1 && argv[1][0] == '-')
 	{
 		pwd_errormsg(argv);
-		exit_free(cmds);
+		pwd_free(pl);
 		exit(2);
 	}
 	else if ((argc == 1) || (argv[1][0] >= 32 && argv[1][0] <= 126))

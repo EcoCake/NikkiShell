@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 21:11:02 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 21:58:17 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/27 16:18:40 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	heredoc_check(t_cmd *cmds, t_pipeline *pl)
 
 	if (pipe(fd) == -1)
 	{
-		exit_free(cmds);
+		free_cmd_list(pl->head);
+		free_env_list(pl->env);
 		exit(1);
 	}
 	g_last_signal = 0;

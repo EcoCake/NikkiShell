@@ -6,11 +6,22 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 21:37:49 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 23:38:14 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/27 16:21:49 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*join3(char *s1, char *s2, char *s3)
+{
+	char	*res;
+	char	*temp;
+
+	temp = ft_strjoin(s1, s2);
+	res = ft_strjoin(temp, s3);
+	free(temp);
+	return (res);
+}
 
 void	not_builtin(t_pipeline *pl, t_cmd *cmds)
 {
@@ -28,11 +39,11 @@ void	not_builtin(t_pipeline *pl, t_cmd *cmds)
 		execve(path, cmds->args, env_array);
 		free(path);
 	}
-	ft_putstr_fd("nikkishell: ", 2);
-	ft_putstr_fd(cmds->args[0], 2);
-	ft_putstr_fd(": command not found\n", 2);
+	path = join3("nikkishell: ", cmds->args[0], ": command not found\n");
+	ft_putstr_fd(path, 2);
+	free(path);
 	free(pl->pids);
-	free_cmd_list(cmds);
+	free_cmd_list(pl->head);
 	free_env_array(env_array);
 	free_env_list(pl->env);
 	exit(127);
@@ -53,7 +64,7 @@ int	builtin_check(t_pipeline *pl, t_cmd *cmds)
 	if (((ft_strcmp(cmds->args[0], "echo") == 0)))
 		return (ft_echo(get_argc(cmds), cmds->args));
 	if (((ft_strcmp(cmds->args[0], "pwd") == 0)))
-		return (ft_pwd(get_argc(cmds), cmds->args, cmds));
+		return (ft_pwd(get_argc(cmds), cmds->args, pl));
 	if (((ft_strcmp(cmds->args[0], "env") == 0)))
 		return (ft_env(get_argc(cmds), cmds->args, pl));
 	not_builtin(pl, cmds);
