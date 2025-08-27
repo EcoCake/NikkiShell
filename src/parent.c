@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 22:31:38 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 22:18:38 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/27 15:05:49 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,6 @@ int	adoption_center(t_cmd *cmds)
 
 void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
 {
-	if (ft_strcmp(cmds->args[0], "exit") != 0)
-	{
-		pl->og_in = dup(0);
-		pl->og_out = dup(1);
-	}
 	command_redirections(i, pl, cmds, 1);
 	pl->extcode = builtin_check(pl, cmds);
 	if (pl->extcode != 0 && ft_strcmp(cmds->args[0], "exit") != 0)
@@ -51,7 +46,7 @@ void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
 		free_cmd_list(cmds);
 		exit(pl->extcode);
 	}
-	restore_fds(pl->og_in, pl->og_out, cmds->args[0]);
+	restore_fds(pl->og_in, pl->og_out, cmds->args[0], cmds);
 }
 
 void	child_exec(t_pipeline *pl, t_cmd *cur_cmd, int i)
@@ -75,9 +70,9 @@ void	child_exec(t_pipeline *pl, t_cmd *cur_cmd, int i)
 }
 
 //restore after parent process
-void	restore_fds(int save_fd_in, int save_fd_out, char *cmds)
+void	restore_fds(int save_fd_in, int save_fd_out, char *cmds, t_cmd *cm)
 {
-	if (!cmds || ft_strcmp(cmds, "exit") != 0)
+	if (!cmds || adoption_center(cm) == 0)
 	{
 		dup2(save_fd_in, 0);
 		dup2(save_fd_out, 1);
