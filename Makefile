@@ -43,8 +43,6 @@ SRCS_NAMES      = \
 	parent.c	\
 	env_update.c \
 	expansion.c	\
-	parent.c	\
-	env_update.c \
 	basic.c \
 	basic1.c \
 

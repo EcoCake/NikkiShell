@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/27 15:32:18 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/27 15:28:20 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	command_loop(t_pipeline *pl, t_cmd *cmds)
 	}
 }
 
-int	exec_main(t_cmd *cmds, t_env_var *env_list)
+int	exec_main(t_cmd *cmds, t_env_var *env_list, int last_exit_status)
 {
 	t_pipeline	pl;
 	int			i;
@@ -107,6 +107,7 @@ int	exec_main(t_cmd *cmds, t_env_var *env_list)
 
 	i = 0;
 	init_pl(&pl, cmds, env_list);
+	pl.extcode = last_exit_status;
 	command_loop(&pl, cmds);
 	while (i < pl.num_pids)
 	{

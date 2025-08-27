@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/27 16:22:58 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/27 15:27:21 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	redir_loop(t_cmd *cmds, t_pipeline *pl, int i);
 void	command_redirections(int i, t_pipeline *pl, t_cmd *cmds, int parent);
 void	exec(t_pipeline *pl, t_cmd *cmds, int i);
 void	command_loop(t_pipeline *pl, t_cmd *cmds);
-int		exec_main(t_cmd *cmds, t_env_var *env_list);
+int		exec_main(t_cmd *cmds, t_env_var *env_list, int last_exit_status);
 
 // exec_utils.c
 int		get_argc(t_cmd *cmds);
