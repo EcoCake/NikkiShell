@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 21:54:34 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/26 21:34:31 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/27 14:34:20 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,11 @@ char    *expand_and_unquote(char *str, t_env_var *env_list, int last_exit_status
 	in_dquote = 0;
 	while (str[i])
 	{
+		if (str[i] == '$' && str[i + 1] == '"' && !in_squote)
+        {
+            i++;
+            continue;
+        }
 		if (str[i] == '\'' && !in_dquote)
 		{
 			in_squote = !in_squote;
