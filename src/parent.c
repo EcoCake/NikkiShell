@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 22:31:38 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/27 15:05:49 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/27 16:29:12 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	child_exec(t_pipeline *pl, t_cmd *cur_cmd, int i)
 	}
 	else if (pl->pids[pl->p_m] == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (cur_cmd->redirection
 			&& cur_cmd->redirection->type == HERE_DOC)
 			heredoc_check(cur_cmd, pl);

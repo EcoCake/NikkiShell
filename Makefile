@@ -46,6 +46,10 @@ SRCS_NAMES      = \
 	expansion.c	\
 	basic.c \
 	basic1.c \
+	expansion_util.c \
+	token_to_args.c \
+	expand_and_unquote.c \
+	env_to_array.c \
 
 MINISHELL_SRCS  = $(addprefix src/, $(SRCS_NAMES))
 
