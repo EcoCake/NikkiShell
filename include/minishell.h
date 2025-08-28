@@ -6,16 +6,16 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:02 by amezoe            #+#    #+#             */
-/*   Updated: 2025/07/25 01:40:54 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/28 17:51:25 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MIHISHELL_H
 # define MINISHELL_H
 
-#include "structs.h"
-#include "functions.h"
-#include "libft/libft.h"
+# include "structs.h"
+# include "functions.h"
+# include "libft/libft.h"
 
 
 #include <limits.h>

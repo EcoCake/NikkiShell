@@ -13,7 +13,8 @@ READLINE_FLAGS  = -lreadline
 
 # --- Source Files ---
 SRCS_NAMES      = \
-	tester.c \
+	main.c \
+	main_utils.c \
 	free.c \
 	free1.c \
 	signals.c \
@@ -43,8 +44,6 @@ SRCS_NAMES      = \
 	parent.c	\
 	env_update.c \
 	expansion.c	\
-	parent.c	\
-	env_update.c \
 	basic.c \
 	basic1.c \
 
