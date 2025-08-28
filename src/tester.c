@@ -6,24 +6,11 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 14:17:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/27 16:35:05 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/28 18:32:13 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_line_whitespace(const char *line)
-{
-	if (!line)
-		return (1);
-	while (*line)
-	{
-		if (!is_space((unsigned char)*line))
-			return (0);
-		line++;
-	}
-	return (1);
-}
 
 int main(int ac, char **av, char **envp)
 {

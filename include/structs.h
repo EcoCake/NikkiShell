@@ -3,76 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:29:52 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/24 20:33:18 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/28 19:22:45 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-#include <sys/types.h>
-
+# include <sys/types.h>
 
 typedef enum e_token_types
 {
-	D_QUOTE,			//0
-	QUOTE,				//1
-	HERE_DOC,			//2
-	PIPE,				//3
-	REDIR_IN,			//4
-	REDIR_OUT,			//5
-	REDIR_APPEND,		//6
-	WORD,				//7
-	DEFAULT_ERROR		//8
+	D_QUOTE,
+	QUOTE,
+	HERE_DOC,
+	PIPE,
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APPEND,
+	WORD,
+	DEFAULT_ERROR
 }	t_token_types;
 
 typedef struct s_env_var
 {
-	char				*fullstring; // stores key=value as whole
+	char				*fullstring;
 	struct s_env_var	*next;
-} t_env_var;
-
+}	t_env_var;
 typedef struct s_token
 {
 	char			*value;
 	t_token_types	type;
-	struct s_token	*next; //linked list of tokens
+	struct s_token	*next;
 }	t_token;
 
-//struct for a single redir
 typedef struct s_redirection
 {
-	t_token_types			type; //redirIn,redirOut etc
+	t_token_types			type;
 	char					*file;
 	struct s_redirection	*next;
 }	t_redirection;
 
-
-//struc for command
-
 typedef struct s_cmd
 {
-	char			**args; // array of strings for cmd name and args for execve
-	t_redirection 	*redirection;
+	char			**args;
+	t_redirection	*redirection;
 	struct s_cmd	*next;
-} t_cmd;
-
+}	t_cmd;
 
 typedef struct s_pipeline
 {
-	t_env_var 	*env;
-	t_cmd		*head;
-	int			**pipes;
-	pid_t		*pids;
-	int			num_cmds;
-	int			num_pids;
-	int			p_m;
-	int			extcode;
-	int			og_in;
-	int			og_out;
+	t_env_var		*env;
+	t_cmd			*head;
+	int				**pipes;
+	pid_t			*pids;
+	int				num_cmds;
+	int				num_pids;
+	int				p_m;
+	int				extcode;
+	int				og_in;
+	int				og_out;
 }	t_pipeline;
+
+typedef struct s_exp_ctx
+{
+	char			*str;
+	t_env_var		*env;
+	int				las;
+	int				i;
+	int				in_squote;
+	int				in_dquote;
+}	t_exp_ctx;
+
+typedef struct s_tokenizer_state
+{
+	t_token				*head;
+	t_token				*current;
+	char				*line;
+	int					i;
+}	t_tokenizer_state;
 
 #endif
