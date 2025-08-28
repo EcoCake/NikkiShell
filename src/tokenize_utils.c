@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:45:16 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/28 14:42:34 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/28 19:39:08 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,6 @@ char	*extract_file_delimiter(const char *line, int *position)
 	else
 		extracted_value = extract_word(line, position);
 	return (extracted_value);
-}
-
-int	is_line_whitespace(const char *line)
-{
-	if (!line)
-		return (1);
-	while (*line)
-	{
-		if (!is_space((unsigned char)*line))
-			return (0);
-		line++;
-	}
-	return (1);
 }
 
 char	*extract_full_argument(const char *line, int *position)

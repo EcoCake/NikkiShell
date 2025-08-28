@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/28 18:59:54 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/28 19:47:38 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,26 @@ int				is_word(const char *s);
 char			*extract_word(const char *line, int *position);
 int				count_word_tokens(t_token *head);
 
+//	main.c
+void			expand_and_exec(t_cmd *cmds, t_env_var *env_list, int status);
+int				check_cmds(t_cmd **cmds, t_token *tok,
+					int *exit_status, char *line);
+int				check_tok(char *line, t_token **tok, t_env_var *env,
+					int *exit_status);
+t_env_var		*env_check(char **env);
+
+//	main_utils.c
+char			*sig_interrupt(int *last_exit_status, t_env_var *env_list);
+void			bye_bye(char *line, t_env_var *env_list, int last_exit_status);
+void			line_ext2(char *line, int *last_exit_status);
+void			line_fail(t_env_var *env_list);
+int				is_line_whitespace(char **line, int *status, t_env_var *env);
+
 //  cd.c
+int				ft_path_extra(char *str, t_pipeline *pl);
+int				ft_paths(char *str);
+void			linesavercd(t_pipeline *pl, char *path);
+int				ft_cd(int argc, char **argv, t_pipeline *pl);
 int				ft_path_extra(char *str, t_pipeline *pl);
 int				ft_paths(char *str);
 void			linesavercd(t_pipeline *pl, char *path);
@@ -44,8 +63,16 @@ int				ft_cd_error(char *path, char *to_free);
 char			*fill_path(char *str);
 int				error_msg_cd(void);
 char			*ft_strjoinslash(char *s1, char *s2);
+int				ft_cd_error(char *path, char *to_free);
+char			*fill_path(char *str);
+int				error_msg_cd(void);
+char			*ft_strjoinslash(char *s1, char *s2);
 
 // echo.c
+int				flag_checker(char *flag);
+void			n_skipper(char **argv, int *j);
+void			ft_write_lines(char **argv, int *i, int *j);
+int				ft_echo(int argc, char **argv);
 int				flag_checker(char *flag);
 void			n_skipper(char **argv, int *j);
 void			ft_write_lines(char **argv, int *i, int *j);
@@ -55,8 +82,12 @@ int				ft_echo(int argc, char **argv);
 void			pwd_free(t_pipeline *pl);
 void			pwd_errormsg(char **argv);
 int				ft_pwd(int argc, char **argv, t_pipeline *pl);
+void			pwd_free(t_pipeline *pl);
+void			pwd_errormsg(char **argv);
+int				ft_pwd(int argc, char **argv, t_pipeline *pl);
 
 // env.c
+int				ft_env(int argc, char **argv, t_pipeline *pl);
 int				ft_env(int argc, char **argv, t_pipeline *pl);
 
 //	unset.c
@@ -64,8 +95,17 @@ int				unset_head(char *str, t_pipeline *pl);
 void			unset_last(char *str, t_pipeline *pl);
 void			unset_env(char *str, t_pipeline *pl);
 int				ft_unset(int argc, char **argv, t_pipeline *pl);
+int				unset_head(char *str, t_pipeline *pl);
+void			unset_last(char *str, t_pipeline *pl);
+void			unset_env(char *str, t_pipeline *pl);
+int				ft_unset(int argc, char **argv, t_pipeline *pl);
 
 //	export.c
+void			exp_alone(t_pipeline *pl);
+void			expsorter(char **exvar);
+void			expfiller(int argc, char **argv, char **exvar, t_pipeline *pl);
+int				expcounter(int argc, t_pipeline *pl);
+int				ft_export(int argc, char **argv, t_pipeline *pl);
 void			exp_alone(t_pipeline *pl);
 void			expsorter(char **exvar);
 void			expfiller(int argc, char **argv, char **exvar, t_pipeline *pl);
@@ -78,13 +118,26 @@ char			*ft_strdupexp(const char *s);
 void			ft_free(char **array);
 int				ft_strchrn(char *str, char c);
 void			add_env_var(char *var, t_pipeline *pl);
+int				ft_strchre(char *str, char c);
+char			*ft_strdupexp(const char *s);
+void			ft_free(char **array);
+int				ft_strchrn(char *str, char c);
+void			add_env_var(char *var, t_pipeline *pl);
 
 //	export_utils2.c
 void			expprinter(char **exvar);
 int				name_checker(char *var);
 void			dup_check(char *var, t_pipeline *pl);
+void			expprinter(char **exvar);
+int				name_checker(char *var);
+void			dup_check(char *var, t_pipeline *pl);
 
 //	exit.c
+void			linesave_exit_free(t_pipeline *pl, t_cmd *cmds);
+int				numchecker(char *str);
+void			line_saver1(t_pipeline *pl);
+void			line_saver2(char **argv, t_pipeline *pl);
+int				ft_exit(int argc, char **argv, t_pipeline *pl, t_cmd *cmds);
 void			linesave_exit_free(t_pipeline *pl, t_cmd *cmds);
 int				numchecker(char *str);
 void			line_saver1(t_pipeline *pl);
@@ -114,8 +167,18 @@ void			restore_fds(int save_fd_in, int save_fd_out, char *cmds,
 					t_cmd *cm);
 int				children_counter(t_cmd *cmds);
 void			child_exec(t_pipeline *pl, t_cmd *cur_cmd, int i);
+int				adoption_center(t_cmd *cmds);
+void			exec_parent(t_pipeline *pl, t_cmd *cmds, int i);
+void			restore_fds(int save_fd_in, int save_fd_out,
+					char *cmds, t_cmd *cm);
+int				children_counter(t_cmd *cmds);
+void			child_exec(t_pipeline *pl, t_cmd *cur_cmd, int i);
 
 //	env_update.c
+void			old_pwd(t_pipeline *pl);
+void			strjoin_fail_msg(t_env_var	*finger);
+void			cd_update(t_pipeline *pl);
+int				cd_tracker(int argc, char **argv, t_pipeline *pl);
 void			old_pwd(t_pipeline *pl);
 void			strjoin_fail_msg(t_env_var	*finger);
 void			cd_update(t_pipeline *pl);
@@ -129,8 +192,20 @@ void			exec(t_pipeline *pl, t_cmd *cmds, int i);
 void			command_loop(t_pipeline *pl, t_cmd *cmds);
 int				exec_main(t_cmd *cmds, t_env_var *env_list,
 					int last_exit_status);
+void			redir_loop(t_cmd *cmds, t_pipeline *pl, int i);
+void			command_redirections(int i, t_pipeline *pl,
+					t_cmd *cmds, int parent);
+void			exec(t_pipeline *pl, t_cmd *cmds, int i);
+void			command_loop(t_pipeline *pl, t_cmd *cmds);
+int				exec_main(t_cmd *cmds, t_env_var *env_list,
+					int last_exit_status);
 
 // exec_utils.c
+int				get_argc(t_cmd *cmds);
+int				ft_strcmp(char *s1, char *s2);
+void			free_tab_exec(char **tab);
+void			exit_free(t_cmd *cmds);
+int				cmds_count(t_cmd *cmds);
 int				get_argc(t_cmd *cmds);
 int				ft_strcmp(char *s1, char *s2);
 void			free_tab_exec(char **tab);
@@ -140,8 +215,13 @@ int				cmds_count(t_cmd *cmds);
 //	exec_path.c
 int				absolute_path(char *cmd);
 char			*env_path(t_cmd *cmds, t_pipeline *pl);
+int				absolute_path(char *cmd);
+char			*env_path(t_cmd *cmds, t_pipeline *pl);
 
 //	exec_pipes.c
+void			close_pipes(t_pipeline *pl);
+void			init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list);
+void			init_pipes(t_pipeline *pl, int num_cmds);
 void			close_pipes(t_pipeline *pl);
 void			init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list);
 void			init_pipes(t_pipeline *pl, int num_cmds);
@@ -150,10 +230,18 @@ void			init_pipes(t_pipeline *pl, int num_cmds);
 char			*join3(char *s1, char *s2, char *s3);
 void			not_builtin(t_pipeline *pl, t_cmd *cmds);
 int				builtin_check(t_pipeline *pl, t_cmd *cmds);
+char			*join3(char *s1, char *s2, char *s3);
+void			not_builtin(t_pipeline *pl, t_cmd *cmds);
+int				builtin_check(t_pipeline *pl, t_cmd *cmds);
 
 //free.c
 
 void			free_token_list(t_token *head);
+void			free_env_list(t_env_var *head);
+void			free_env_array(char **env_array);
+void			free_str_array(char **array);
+void			free_redir_list(t_redirection *head);
+void			free_cmd_list(t_cmd *head);
 void			free_env_list(t_env_var *head);
 void			free_env_array(char **env_array);
 void			free_str_array(char **array);
@@ -198,13 +286,13 @@ void			redir_append_check(t_pipeline *pl, t_redirection *f);
 extern volatile sig_atomic_t	g_last_signal;
 void			handle_sigint_rl(int signal);
 void			signalhandler(int sig);
+void			sig_change(int *last_exit_status, int ac, char **env);
 
 // tokenize_utils.c
 
 char			*extract_quoted_str(const char *line, int *position,
 					char quote);
 char			*extract_file_delimiter(const char *line, int *position);
-int				is_line_whitespace(const char *line);
 char			*extract_full_argument(const char *line, int *position);
 
 //tokenize utils1.c

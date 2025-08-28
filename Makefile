@@ -13,7 +13,8 @@ READLINE_FLAGS  = -lreadline
 
 # --- Source Files ---
 SRCS_NAMES      = \
-	tester.c \
+	main.c \
+	main_utils.c \
 	free.c \
 	free1.c \
 	signals.c \
