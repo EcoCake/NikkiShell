@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 18:47:19 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 18:48:31 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 00:00:36 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ int	name_checker(char *var)
 	i = 0;
 	if (ft_isalpha(var[0]) == 0 && var[0] != '_')
 	{
-		write(2, "export: ", 8);
+		write(2, "nikkishell: export: `", 21);
 		write(2, var, ft_strlen(var));
-		write(2, ": not a valid identifier", 24);
+		write(2, "': not a valid identifier", 25);
 		write(2, "\n", 1);
 		return (1);
 	}
@@ -42,9 +42,9 @@ int	name_checker(char *var)
 	{
 		if (!(ft_isalnum(var[i]) == 1 || var[i] == '_'))
 		{
-			write(2, "export: ", 8);
+			write(2, "nikkishell: export: `", 21);
 			write(2, var, ft_strlen(var));
-			write(2, ": not a valid identifier", 24);
+			write(2, "': not a valid identifier", 25);
 			write(2, "\n", 1);
 			return (1);
 		}
@@ -63,8 +63,12 @@ void	dup_check(char *var, t_pipeline *pl)
 	while (f)
 	{
 		i = ft_strchrn(f->fullstring, '=');
+		if (i == -1)
+			i = ft_strchrn(var, '=') - 1;
 		if (i >= 0 && ft_strncmp(f->fullstring, var, i) == 0)
 		{
+			if (ft_strchrn(var, '=') == -1)
+				return ;
 			free(f->fullstring);
 			f->fullstring = ft_strdup(var);
 			return ;

@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 23:59:53 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 18:36:58 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 00:17:26 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,7 @@ void	unset_env(char *str, t_pipeline *pl)
 		&& ft_strncmp(str, f->fullstring, ft_strlen(str)) != 0)
 	{
 		if (f && f->next
-			&& ft_strncmp(str, f->next->fullstring, ft_strlen(str)) == 0
-			&& f->next->fullstring[ft_strlen(str)] == '=')
+			&& ft_strncmp(str, f->next->fullstring, ft_strlen(str)) == 0)
 		{
 			temp = f->next;
 			f->next = temp->next;

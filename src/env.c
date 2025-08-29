@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 23:12:30 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/23 18:38:35 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 00:06:06 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ int	ft_env(int argc, char **argv, t_pipeline *pl)
 	{
 		while (finger)
 		{
-			write(1, finger->fullstring, ft_strlen(finger->fullstring));
-			write(1, "\n", 1);
+			if (ft_strchre(finger->fullstring, '=') == 0)
+			{
+				write(1, finger->fullstring, ft_strlen(finger->fullstring));
+				write(1, "\n", 1);
+			}
 			finger = finger->next;
 		}
 	}

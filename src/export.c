@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 18:38:34 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 18:48:26 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 00:41:21 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ int	expcounter(int argc, t_pipeline *pl)
 	finger = pl->env;
 	while (finger)
 	{
-		if (ft_strchre(finger->fullstring, '=') == 0)
-			v++;
+		v++;
 		finger = finger->next;
 	}
 	while (argc > 1 && i < argc)
@@ -47,15 +46,18 @@ void	expfiller(int argc, char **argv, char **exvar, t_pipeline *pl)
 	while (finger)
 	{
 		if (ft_strchre(finger->fullstring, '=') == 0)
-		{
 			exvar[e] = ft_strdupexp(finger->fullstring);
-			e++;
-		}
+		else
+			exvar[e] = ft_strdup(finger->fullstring);
+		e++;
 		finger = finger->next;
 	}
 	while (argc > 1 && i < argc)
 	{
-		exvar[e] = ft_strdupexp(argv[i]);
+		if (ft_strchre(argv[i], '=') == 0)
+			exvar[e] = ft_strdupexp(argv[i]);
+		else
+			exvar[e] = ft_strdup(argv[i]);
 		e++;
 		i++;
 	}
@@ -80,6 +82,7 @@ void	expsorter(char **exvar)
 		else
 			e++;
 	}
+	e = 0;
 }
 
 //shell == 0, exp == 1
@@ -112,8 +115,7 @@ int	ft_export(int argc, char **argv, t_pipeline *pl)
 		i++;
 		if (name_checker(argv[i]) == 1)
 			continue ;
-		if (exp_or_shell(argv[i]) == 1)
-			dup_check(argv[i], pl);
+		dup_check(argv[i], pl);
 	}
 	ft_free(exvar);
 	return (0);
