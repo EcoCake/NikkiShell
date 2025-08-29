@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/28 19:47:38 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/29 17:19:49 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char			*extract_word(const char *line, int *position);
 int				count_word_tokens(t_token *head);
 
 //	main.c
-void			expand_and_exec(t_cmd *cmds, t_env_var *env_list, int status);
+void			expand_and_exec(t_cmd *cmds, t_env_var *env_list, int *status);
 int				check_cmds(t_cmd **cmds, t_token *tok,
 					int *exit_status, char *line);
 int				check_tok(char *line, t_token **tok, t_env_var *env,
@@ -332,5 +332,9 @@ char			*str_append(char *dest, const char *src);
 char			*expand_and_unquote(char *str, t_env_var *env_list, int las);
 int				handle_quotes(t_exp_ctx *ctx);
 int				process_char(char **final_str, t_exp_ctx *ctx);
+
+//shlvl
+void			change_shell_lvl(t_env_var *env);
+char			*increment_shell_lvl(char *str);
 
 #endif

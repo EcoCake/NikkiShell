@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/28 19:39:39 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/29 17:10:39 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 	{
 		if (cmds->args[0] && adoption_center(cmds) == 1)
 			perror(cmds->args[0]);
-		free_cmd_list(cmds);
+		free_cmd_list(pl->head);
 		free_env_list(pl->env);
 		free(pl->pids);
 		exit(error_code);
@@ -108,6 +108,8 @@ int	exec_main(t_cmd *cmds, t_env_var *env_list, int last_exit_status)
 	i = 0;
 	init_pl(&pl, cmds, env_list);
 	pl.extcode = last_exit_status;
+	if (ft_strcmp("./nikkishell", cmds->args[0]) == 0)
+		change_shell_lvl(env_list);
 	command_loop(&pl, cmds);
 	while (i < pl.num_pids)
 	{
