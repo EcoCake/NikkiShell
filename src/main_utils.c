@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 17:43:26 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/28 18:17:53 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/29 19:09:30 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,12 @@ char	*sig_interrupt(int *last_exit_status, t_env_var *env_list)
 {
 	char	*line;
 
+	line = readline("nikkishell$ ");
 	if (g_last_signal == SIGINT)
 	{
 		*last_exit_status = 130;
 		g_last_signal = 0;
 	}
-	line = readline("nikkishell$ ");
 	if (line == NULL)
 	{
 		line_fail(env_list);

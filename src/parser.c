@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:04:18 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/28 17:16:35 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/29 18:42:31 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ t_cmd	*parse_tokens(t_token *tokens)
 			if (!check_pipe(&current_token, &current_cmd, &head))
 				return (NULL);
 		current_cmd->args = tokens_to_args_array(&current_token);
+		if (current_cmd->args[0] == NULL)
+			free(current_cmd->args);
 		if (!is_norm(&current_cmd, &current_token, &head, &new_redir))
 			return (NULL);
 	}
