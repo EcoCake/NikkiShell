@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/30 17:16:44 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 23:07:52 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,7 +330,6 @@ int				handle_quotes(t_exp_ctx *ctx);
 int				process_char(char **final_str, t_exp_ctx *ctx);
 
 //shlvl
-void			change_shell_lvl(t_env_var *env);
 char			*increment_shell_lvl(char *str);
 
 #endif

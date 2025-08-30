@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:48:44 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/28 18:10:02 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/30 23:08:11 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ t_env_var	*create_env_node(char *env_str)
 		return (NULL);
 	}
 	new->next = NULL;
-	new->fullstring = ft_strdup(env_str);
+	if (ft_strncmp(env_str, "SHLVL=", 6) == 0)
+		new->fullstring = increment_shell_lvl(env_str);
+	else
+		new->fullstring = ft_strdup(env_str);
 	if (!new->fullstring)
 	{
 		free(new);

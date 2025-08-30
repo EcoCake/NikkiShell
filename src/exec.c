@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/29 17:10:39 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 23:08:20 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ int	exec_main(t_cmd *cmds, t_env_var *env_list, int last_exit_status)
 	i = 0;
 	init_pl(&pl, cmds, env_list);
 	pl.extcode = last_exit_status;
-	if (ft_strcmp("./nikkishell", cmds->args[0]) == 0)
-		change_shell_lvl(env_list);
 	command_loop(&pl, cmds);
 	while (i < pl.num_pids)
 	{
