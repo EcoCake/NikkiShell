@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/29 17:19:49 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 17:16:44 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,15 @@ int				is_line_whitespace(char **line, int *status, t_env_var *env);
 //  cd.c
 int				ft_path_extra(char *str, t_pipeline *pl);
 int				ft_paths(char *str);
-void			linesavercd(t_pipeline *pl, char *path);
 int				ft_cd(int argc, char **argv, t_pipeline *pl);
-int				ft_path_extra(char *str, t_pipeline *pl);
-int				ft_paths(char *str);
-void			linesavercd(t_pipeline *pl, char *path);
-int				ft_cd(int argc, char **argv, t_pipeline *pl);
+void			linesavercd(t_pipeline *pl, char **path);
 
 //	cd_utils.c
-int				ft_cd_error(char *path, char *to_free);
+int				ft_cd_error(char *path, t_pipeline *pl, char *to_free);
 char			*fill_path(char *str);
 int				error_msg_cd(void);
 char			*ft_strjoinslash(char *s1, char *s2);
-int				ft_cd_error(char *path, char *to_free);
+int				ft_cd_error(char *path, t_pipeline *pl, char *to_free);
 char			*fill_path(char *str);
 int				error_msg_cd(void);
 char			*ft_strjoinslash(char *s1, char *s2);
@@ -126,10 +122,10 @@ void			add_env_var(char *var, t_pipeline *pl);
 
 //	export_utils2.c
 void			expprinter(char **exvar);
-int				name_checker(char *var);
+int				name_checker(char *var, t_pipeline *pl);
 void			dup_check(char *var, t_pipeline *pl);
 void			expprinter(char **exvar);
-int				name_checker(char *var);
+int				name_checker(char *var, t_pipeline *pl);
 void			dup_check(char *var, t_pipeline *pl);
 
 //	exit.c

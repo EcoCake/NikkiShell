@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 23:04:59 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 19:03:50 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 17:22:11 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	old_pwd(t_pipeline *pl)
 	current_pwd = get_env_value(pl->env, "PWD");
 	while (finger)
 	{
-		if (strncmp(finger->fullstring, "OLDPWD=", 7) == 0)
+		if (ft_strncmp(finger->fullstring, "OLDPWD=", 7) == 0)
 		{
 			free(finger->fullstring);
 			finger->fullstring = NULL;
@@ -36,6 +36,9 @@ void	old_pwd(t_pipeline *pl)
 		}
 		finger = finger->next;
 	}
+	current_pwd = ft_strjoin("OLDPWD=", current_pwd);
+	add_env_var(current_pwd, pl);
+	free(current_pwd);
 }
 
 void	strjoin_fail_msg(t_env_var	*finger)
@@ -58,7 +61,7 @@ void	cd_update(t_pipeline *pl)
 	}
 	while (finger)
 	{
-		if (strncmp(finger->fullstring, "PWD=", 4) == 0)
+		if (ft_strncmp(finger->fullstring, "PWD=", 4) == 0)
 		{
 			free(finger->fullstring);
 			finger->fullstring = NULL;

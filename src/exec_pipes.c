@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 21:32:40 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 22:44:39 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 17:25:58 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,5 @@ void	init_pl(t_pipeline *pl, t_cmd *cmds, t_env_var *env_list)
 	pl->p_m = 0;
 	pl->og_in = dup(0);
 	pl->og_out = dup(1);
+	pl->cd_error = 0;
 }

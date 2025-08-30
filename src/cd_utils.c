@@ -6,19 +6,27 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 17:16:46 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 17:21:18 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 17:26:36 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cd_error(char *path, char *to_free)
+int	ft_cd_error(char *path, t_pipeline *pl, char *to_free)
 {
-	write(2, "cd: ", 4);
+	if (pl->cd_error != 0)
+	{
+		if (to_free != NULL)
+			free(to_free);
+		return (1);
+	}
+	write(2, "nikkishell: cd: ", 16);
 	write(2, path, ft_strlen(path));
 	write(2, ": No such file or directory\n", 28);
 	if (to_free != NULL)
 		free(to_free);
+	pl->extcode = 1;
+	pl->cd_error++;
 	return (1);
 }
 

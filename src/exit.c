@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 03:23:52 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 19:20:29 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 17:51:39 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	numchecker(char *str)
 	int	i;
 
 	i = 0;
+	if (ft_strcmp(str, "9223372036854775807") > 0)
+		return (1);
 	if ((str[i] == '-' || str[i] == '+') && ft_strlen(str) > 1)
 		i++;
 	while (str[i])
