@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:05:48 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/30 17:21:56 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/31 00:43:06 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,3 @@ int	ft_cd(int argc, char **argv, t_pipeline *pl)
 		return (ft_cd_error(argv[1], pl, NULL));
 	return (0);
 }
-//ft_paths(argv[1], pl) == 0 || 

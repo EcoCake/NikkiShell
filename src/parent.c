@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 22:31:38 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/30 17:32:11 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/31 00:21:48 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	adoption_center(t_cmd *cmds)
 void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
 {
 	command_redirections(i, pl, cmds, 1);
+	if (check_expand(cmds->args[0], pl, 1) == 1)
+		return ;
 	pl->extcode = builtin_check(pl, cmds);
 	if (pl->extcode != 0 && ft_strcmp(cmds->args[0], "exit") != 0)
 	{
