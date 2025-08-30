@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 22:31:38 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/27 16:29:12 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/30 01:17:59 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,9 @@ void	exec_parent(t_pipeline *pl, t_cmd *cmds, int i)
 	{
 		if (adoption_center(cmds) == 1)
 			perror(cmds->args[0]);
-		free_cmd_list(cmds);
-		exit(pl->extcode);
+		// free_cmd_list(pl->head);
+		// free_env_list(pl->env);
+		return ;
 	}
 	restore_fds(pl->og_in, pl->og_out, cmds->args[0], cmds);
 }

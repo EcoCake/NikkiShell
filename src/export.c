@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 18:38:34 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/30 00:41:21 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 01:11:50 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	ft_export(int argc, char **argv, t_pipeline *pl)
 	i = 0;
 	e = expcounter(argc, pl);
 	exvar = malloc(sizeof(char *) * (e + 1));
+	pl->extcode = 0;
 	if (!exvar)
 		return (1);
 	exvar[e] = NULL;
@@ -113,10 +114,10 @@ int	ft_export(int argc, char **argv, t_pipeline *pl)
 	while (argc > 1 && argv[i + 1])
 	{
 		i++;
-		if (name_checker(argv[i]) == 1)
+		if (name_checker(argv[i], pl) == 1)
 			continue ;
 		dup_check(argv[i], pl);
 	}
 	ft_free(exvar);
-	return (0);
+	return (pl->extcode);
 }

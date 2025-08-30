@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 18:47:19 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/30 00:00:36 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/30 01:02:15 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,23 @@ void	expprinter(char **exvar)
 	}
 }
 
-int	name_checker(char *var)
+void	exp_error_msg(char *var)
+{
+	write(2, "nikkishell: export: `", 21);
+	write(2, var, ft_strlen(var));
+	write(2, "': not a valid identifier", 25);
+	write(2, "\n", 1);
+}
+
+int	name_checker(char *var, t_pipeline *pl)
 {
 	int	i;
 
 	i = 0;
 	if (ft_isalpha(var[0]) == 0 && var[0] != '_')
 	{
-		write(2, "nikkishell: export: `", 21);
-		write(2, var, ft_strlen(var));
-		write(2, "': not a valid identifier", 25);
-		write(2, "\n", 1);
+		exp_error_msg(var);
+		pl->extcode = 1;
 		return (1);
 	}
 	i = 1;
@@ -42,10 +48,8 @@ int	name_checker(char *var)
 	{
 		if (!(ft_isalnum(var[i]) == 1 || var[i] == '_'))
 		{
-			write(2, "nikkishell: export: `", 21);
-			write(2, var, ft_strlen(var));
-			write(2, "': not a valid identifier", 25);
-			write(2, "\n", 1);
+			exp_error_msg(var);
+			pl->extcode = 1;
 			return (1);
 		}
 		i++;
