@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/31 16:49:41 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/31 17:34:01 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 	close(pl->og_in);
 	close(pl->og_out);
 	command_redirections(i, pl, cmds, 0);
+	check_direc(cmds->args[0], pl);
 	check_expand(cmds->args[0], pl, 0);
 	error_code = builtin_check(pl, cmds);
 	if (error_code != 0)

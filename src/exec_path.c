@@ -6,11 +6,40 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 21:28:09 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/26 22:27:33 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/31 17:34:05 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	check_direc(char *str, t_pipeline *pl)
+{
+	int	fd;
+
+	if (str[0] != '.' && str[0] != '/')
+		return ;
+	fd = open(str, O_RDONLY);
+	close_pipes(pl);
+	free(pl->pids);
+	free_env_list(pl->env);
+	if (fd < 0)
+	{
+		ft_putstr_fd("nikkishell: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		free_cmd_list(pl->head);
+		exit(127);
+	}
+	ft_putstr_fd("nikkishell: ", 2);
+	ft_putstr_fd(str, 2);
+	if (chdir(str) != -1)
+		ft_putstr_fd(": Is a directory\n", 2);
+	else
+		ft_putstr_fd(": Permission denied\n", 2);
+	close(fd);
+	free_cmd_list(pl->head);
+	exit(126);
+}
 
 int	absolute_path(char *cmd)
 {
