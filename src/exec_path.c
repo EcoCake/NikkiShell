@@ -6,17 +6,30 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 21:28:09 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/31 17:34:05 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/31 19:04:17 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	uncheck(char *str)
+{
+	if (str[0] != '.' && str[0] != '/')
+		return (1);
+	if (ft_strncmp("/bin", str, 4) == 0)
+		return (1);
+	if (ft_strncmp("/usr", str, 4) == 0)
+		return (1);
+	if (ft_strncmp("/snap", str, 5) == 0)
+		return (1);
+	return (0);
+}
+
 void	check_direc(char *str, t_pipeline *pl)
 {
 	int	fd;
 
-	if (str[0] != '.' && str[0] != '/')
+	if (uncheck(str))
 		return ;
 	fd = open(str, O_RDONLY);
 	close_pipes(pl);

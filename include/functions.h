@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/31 17:34:33 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/31 19:04:40 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,6 +209,7 @@ void			exit_free(t_cmd *cmds);
 int				cmds_count(t_cmd *cmds);
 
 //	exec_path.c
+int				uncheck(char *str);
 void			check_direc(char *str, t_pipeline *pl);
 int				absolute_path(char *cmd);
 char			*env_path(t_cmd *cmds, t_pipeline *pl);
