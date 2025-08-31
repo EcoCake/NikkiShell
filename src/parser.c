@@ -6,44 +6,11 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 10:04:18 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/29 18:42:31 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/31 00:12:32 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	create_cmd_new_node(t_cmd **head, t_cmd **current_cmd)
-{
-	*head = create_cmd_node();
-	*current_cmd = *head;
-}
-
-int	check_pipe(t_token **current_token, t_cmd **current_cmd, t_cmd **head)
-{
-	if ((*current_token)->type == PIPE)
-	{
-		if (!(*current_cmd) || !(*current_token)->next)
-		{
-			printf("syntax error '%s'\n", (*current_token)->value);
-			free_cmd_list(*head);
-			return (0);
-		}
-		*current_token = (*current_token)->next;
-	}
-	if (!(*head))
-		create_cmd_new_node(head, current_cmd);
-	else
-	{
-		(*current_cmd)->next = create_cmd_node();
-		*current_cmd = (*current_cmd)->next;
-	}
-	if (!*current_cmd)
-	{
-		free(*head);
-		return (0);
-	}
-	return (1);
-}
 
 int	is_redir_heredoc(t_token *current_token)
 {
@@ -83,6 +50,21 @@ int	is_norm(t_cmd **cur_c, t_token **cur_t, t_cmd **head, t_redirection **n_red)
 	return (1);
 }
 
+t_cmd	*add_cmd_node(t_cmd **head, t_cmd **current)
+{
+	t_cmd	*new;
+
+	new = create_cmd_node();
+	if (!new)
+		return (NULL);
+	if (!*head)
+		*head = new;
+	if (*current)
+		(*current)->next = new;
+	*current = new;
+	return (new);
+}
+
 t_cmd	*parse_tokens(t_token *tokens)
 {
 	t_cmd			*head;
@@ -97,14 +79,17 @@ t_cmd	*parse_tokens(t_token *tokens)
 		return (NULL);
 	while (current_token)
 	{
-		if (!head || current_token->type == PIPE)
-			if (!check_pipe(&current_token, &current_cmd, &head))
-				return (NULL);
+		add_cmd_node(&head, &current_cmd);
 		current_cmd->args = tokens_to_args_array(&current_token);
-		if (current_cmd->args[0] == NULL)
-			free(current_cmd->args);
+		if (!current_cmd || current_cmd->args[0] == NULL)
+		{
+			free(head);
+			return (NULL);
+		}
 		if (!is_norm(&current_cmd, &current_token, &head, &new_redir))
 			return (NULL);
+		if (current_token && current_token->type == PIPE)
+			current_token = current_token->next;
 	}
 	return (head);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:50:38 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/29 15:28:48 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/31 00:08:05 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,14 @@ int	check_cmds(t_cmd **cmds, t_token *tok, int *exit_status, char *line)
 
 void	expand_and_exec(t_cmd *cmds, t_env_var *env_list, int *status)
 {
-	expand_cmd_args(cmds, env_list, *status);
+	t_cmd	*tmp;
+
+	tmp = cmds;
+	while (tmp)
+	{
+		expand_cmd_args(tmp, env_list, *status);
+		tmp = tmp->next;
+	}
 	expand_redirs(cmds, env_list, *status);
 	*status = exec_main(cmds, env_list, *status);
 	free_cmd_list(cmds);

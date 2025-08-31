@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 20:03:48 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/26 20:08:03 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/31 00:07:31 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,19 @@ int	count_word_tokens(t_token *head)
 	int	count;
 
 	count = 0;
-	while (head && head->type == WORD)
+	while (head)
 	{
+		if (head->type == PIPE)
+			break ;
+		if (head->type == REDIR_APPEND || head->type == REDIR_IN
+			|| head->type == REDIR_OUT || head->type == HERE_DOC)
+		{
+			if (head->next)
+				head = head->next->next;
+			else
+				break ;
+			continue ;
+		}
 		count++;
 		head = head->next;
 	}
