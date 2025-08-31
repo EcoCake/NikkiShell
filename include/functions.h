@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:31:05 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/30 22:30:56 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/31 00:21:03 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,5 +331,10 @@ int				process_char(char **final_str, t_exp_ctx *ctx);
 
 //shlvl
 char			*increment_shell_lvl(char *str);
+
+//unique expands
+int				expand_empty(t_pipeline *pl, int parent);
+int				expand_pwd(t_pipeline *pl, int parent, char *str);
+int				check_expand(char *str, t_pipeline *pl, int parent);
 
 #endif

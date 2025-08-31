@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/31 00:06:36 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/31 00:21:19 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 	close(pl->og_in);
 	close(pl->og_out);
 	command_redirections(i, pl, cmds, 0);
+	check_expand(cmds->args[0], pl, 0);
 	error_code = builtin_check(pl, cmds);
 	if (error_code != 0)
 	{
