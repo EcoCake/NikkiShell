@@ -6,7 +6,7 @@
 /*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 22:38:51 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/14 22:38:53 by sionow           ###   ########.fr       */
+/*   Updated: 2025/08/31 16:33:14 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	flag_checker(char *flag)
 {
 	int	i;
 
+	signal(SIGPIPE, SIG_IGN);
 	if (flag[0] != '-' || flag[1] != 'n')
 		return (0);
 	i = 2;
@@ -74,5 +75,6 @@ int	ft_echo(int argc, char **argv)
 	}
 	else
 		write (1, "\n", 1);
+	signal(SIGPIPE, SIG_DFL);
 	return (0);
 }

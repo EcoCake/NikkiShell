@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 17:31:54 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/31 00:21:19 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/31 16:25:05 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 	error_code = builtin_check(pl, cmds);
 	if (error_code != 0)
 	{
+		ft_putstr_fd("FDP\n\n", 2);
 		if (cmds->args[0] && adoption_center(cmds) == 1)
 			perror(cmds->args[0]);
 		free_cmd_list(pl->head);
@@ -70,13 +71,11 @@ void	exec(t_pipeline *pl, t_cmd *cmds, int i)
 		free(pl->pids);
 		exit(error_code);
 	}
-	else
-	{
-		free_cmd_list(pl->head);
-		free(pl->pids);
-		free_env_list(pl->env);
-		exit(error_code);
-	}
+	ft_putstr_fd("HIHIHHIHIHIH\n\n", 2);
+	free_cmd_list(pl->head);
+	free(pl->pids);
+	free_env_list(pl->env);
+	exit(error_code);
 }
 
 void	command_loop(t_pipeline *pl, t_cmd *cmds)

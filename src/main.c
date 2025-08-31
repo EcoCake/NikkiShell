@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sionow <sionow@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:50:38 by sionow            #+#    #+#             */
-/*   Updated: 2025/08/31 00:21:31 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/31 16:17:39 by sionow           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ void	expand_and_exec(t_cmd *cmds, t_env_var *env_list, int *status)
 	while (tmp)
 	{
 		expand_cmd_args(tmp, env_list, *status);
+		expand_redirs(tmp, env_list, *status);
 		tmp = tmp->next;
 	}
-	expand_redirs(cmds, env_list, *status);
 	*status = exec_main(cmds, env_list, *status);
 	free_cmd_list(cmds);
 }
