@@ -6,7 +6,7 @@
 /*   By: amezoe <amezoe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 17:27:19 by amezoe            #+#    #+#             */
-/*   Updated: 2025/08/29 18:41:10 by amezoe           ###   ########.fr       */
+/*   Updated: 2025/08/31 00:12:54 by amezoe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,30 @@ void	free_args_on_error(char **args_array, int size)
 	free(args_array);
 }
 
+int	skip_redir_tokens(t_token **current)
+{
+	t_token_types	type;
+
+	while (*current)
+	{
+		type = (*current)->type;
+		if (type == REDIR_APPEND || type == REDIR_IN
+			|| type == REDIR_OUT || type == HERE_DOC)
+		{
+			if ((*current)->next)
+				*current = (*current)->next->next;
+			else
+			{
+				*current = NULL;
+				return (1);
+			}
+		}
+		else
+			break ;
+	}
+	return (0);
+}
+
 int	populate_args_array(char **args, t_token **current, int count)
 {
 	int	i;
@@ -29,6 +53,11 @@ int	populate_args_array(char **args, t_token **current, int count)
 	i = 0;
 	while (i < count)
 	{
+		if ((*current)->type == PIPE)
+			break ;
+		skip_redir_tokens(current);
+		if (!*current)
+			break ;
 		args[i] = ft_strdup((*current)->value);
 		if (!args[i])
 		{
